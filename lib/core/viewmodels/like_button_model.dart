@@ -4,7 +4,7 @@ import 'package:cocktail_app/locator.dart';
 import 'base_model.dart';
 
 class LikeButtonModel extends BaseModel {
-  PostsService _postsService = locator<PostsService>();
+  final PostsService _postsService = locator<PostsService>();
 
   int postLikes(int postId) {
     return _postsService.posts

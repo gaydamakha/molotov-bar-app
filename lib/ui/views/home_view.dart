@@ -12,6 +12,8 @@ import 'package:cocktail_app/ui/widgets/postlist_item.dart';
 import 'base_view.dart';
 
 class HomeView extends StatelessWidget {
+  const HomeView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeModel>(
@@ -19,7 +21,7 @@ class HomeView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         body: model.state == ViewState.Busy
-        ? Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator())
          : Column(
            crossAxisAlignment: CrossAxisAlignment.start,
            children: <Widget>[
@@ -29,8 +31,8 @@ class HomeView extends StatelessWidget {
               child: Text('Welcome ${Provider.of<User>(context).name}', 
               style: headerStyle,),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
               child: Text('Here are all your posts', 
               style: subHeaderStyle),
             ),

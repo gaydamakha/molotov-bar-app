@@ -10,7 +10,7 @@ import 'package:cocktail_app/ui/widgets/like_button.dart';
 
 class PostView extends StatelessWidget {
   final Post post;
-  PostView({this.post});
+  const PostView({this.post, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class PostView extends StatelessWidget {
             Text(post.title, style: headerStyle),
             Text(
               'by ${Provider.of<User>(context).name}',
-              style: TextStyle(fontSize: 9.0),
+              style: const TextStyle(fontSize: 9.0),
             ),
             UIHelper.verticalSpaceMedium(),
             Text(post.body),

@@ -4,7 +4,7 @@ import '../../locator.dart';
 import 'api.dart';
 
 class PostsService {
-  Api _api = locator<Api>();
+  final Api _api = locator<Api>();
 
   List<Post> _posts;
   List<Post> get posts => _posts;

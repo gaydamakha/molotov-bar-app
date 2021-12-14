@@ -12,15 +12,15 @@ class TabContainer extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.directions_car)),
               Tab(icon: Icon(Icons.directions_transit)),
             ],
           ),
-          title: Text('Tabs Demo'),
+          title: const Text('Tabs Demo'),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             LoginView(),
             HomeView(),

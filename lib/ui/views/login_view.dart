@@ -7,6 +7,8 @@ import 'package:cocktail_app/ui/widgets/login_header.dart';
 import 'base_view.dart';
 
 class LoginView extends StatefulWidget {
+  const LoginView({Key key}) : super(key: key);
+
   @override
   _LoginViewState createState() => _LoginViewState();
 }
@@ -26,10 +28,12 @@ class _LoginViewState extends State<LoginView> {
               validationMessage: model.errorMessage,
               controller: _controller),
             model.state == ViewState.Busy
-            ? CircularProgressIndicator()
-            : FlatButton(
-              color: Colors.white,
-              child: Text(
+            ? const CircularProgressIndicator()
+            : TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: const Text(
                 'Login',
                 style: TextStyle(color: Colors.black),
               ),

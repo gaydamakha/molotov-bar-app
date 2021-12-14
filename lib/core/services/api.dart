@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class Api {
   static const endpoint = 'https://jsonplaceholder.typicode.com';
   
-  var client = new http.Client();
+  var client = http.Client();
 
   Future<User> getUserProfile(int userId) async {
     // Get user profile for id
@@ -20,7 +20,7 @@ class Api {
   }
 
   Future<List<Post>> getPostsForUser(int userId) async {
-    var posts = List<Post>();
+    var posts = <Post>[];
     // Get user posts for id
     var response = await client.get('$endpoint/posts?userId=$userId');
 
@@ -36,7 +36,7 @@ class Api {
   }
 
   Future<List<Comment>> getCommentsForPost(int postId) async {
-    var comments = List<Comment>();
+    var comments = <Comment>[];
 
     // Get comments for post
     var response = await client.get('$endpoint/comments?postId=$postId');

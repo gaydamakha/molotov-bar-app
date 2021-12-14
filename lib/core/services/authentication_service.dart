@@ -6,7 +6,7 @@ import '../../locator.dart';
 import 'api.dart';
 
 class AuthenticationService {
-  Api _api = locator<Api>();
+  final Api _api = locator<Api>();
 
   StreamController<User> userController = StreamController<User>();
 

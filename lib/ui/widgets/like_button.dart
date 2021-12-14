@@ -5,9 +5,7 @@ import 'package:cocktail_app/ui/views/base_view.dart';
 class LikeButton extends StatelessWidget {
   final int postId;
 
-  LikeButton({
-    @required this.postId,
-  });
+  const LikeButton({@required this.postId, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +15,7 @@ class LikeButton extends StatelessWidget {
                 Text('Likes ${model.postLikes(postId)}'),
                 MaterialButton(
                   color: Colors.white,
-                  child: Icon(Icons.thumb_up),
+                  child: const Icon(Icons.thumb_up),
                   onPressed: () {
                     model.increaseLikes(postId);
                   },

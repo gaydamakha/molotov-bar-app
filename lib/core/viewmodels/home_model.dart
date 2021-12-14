@@ -6,7 +6,7 @@ import 'package:cocktail_app/locator.dart';
 import 'base_model.dart';
 
 class HomeModel extends BaseModel {
-  PostsService _postsService = locator<PostsService>();
+  final PostsService _postsService = locator<PostsService>();
   
   List<Post> get posts => _postsService.posts;
 
