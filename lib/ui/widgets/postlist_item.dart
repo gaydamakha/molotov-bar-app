@@ -3,8 +3,8 @@ import 'package:cocktail_app/core/models/post.dart';
 
 class PostListItem extends StatelessWidget {
   final Post post;
-  final Function onTap;
-  const PostListItem({this.post, this.onTap, Key key}): super(key: key);
+  final VoidCallback? onTap;
+  const PostListItem({required this.post, this.onTap, Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {

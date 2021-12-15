@@ -10,7 +10,7 @@ import 'package:cocktail_app/ui/widgets/like_button.dart';
 
 class PostView extends StatelessWidget {
   final Post post;
-  const PostView({this.post, Key key}) : super(key: key);
+  const PostView({required this.post, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

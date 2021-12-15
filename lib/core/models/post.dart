@@ -1,11 +1,11 @@
 class Post {
-  int userId;
-  int id;
-  String title;
-  String body;
-  int likes;
+  late int userId;
+  late int id;
+  late String title;
+  late String body;
+  late int likes;
 
-  Post({this.userId, this.id, this.title, this.body, this.likes = 0});
+  Post({required this.userId, required this.id, required this.title, required this.body, this.likes = 0});
 
   Post.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];

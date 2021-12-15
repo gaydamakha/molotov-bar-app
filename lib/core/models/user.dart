@@ -1,8 +1,8 @@
 class User {
-  int id;
-  String name;
-  String username;
-  User({this.id, this.name, this.username});
+  late int id;
+  late String name;
+  late String username;
+  User({required this.id, required this.name, required this.username});
 
   User.initial()
       : id = 0,

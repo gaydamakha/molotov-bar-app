@@ -5,10 +5,11 @@ import 'package:cocktail_app/core/viewmodels/base_model.dart';
 import '../../locator.dart';
 
 class BaseView<T extends BaseModel> extends StatefulWidget {
-  final Widget Function(BuildContext context, T model, Widget child) builder;
-  final Function(T) onModelReady;
+  final Widget Function(BuildContext context, T model, Widget? child) builder;
+  final Function(T)? onModelReady;
 
-  const BaseView({this.builder, this.onModelReady, Key key}): super(key: key);
+  const BaseView({required this.builder, this.onModelReady, Key? key})
+      : super(key: key);
 
   @override
   _BaseViewState<T> createState() => _BaseViewState<T>();
@@ -19,9 +20,7 @@ class _BaseViewState<T extends BaseModel> extends State<BaseView<T>> {
 
   @override
   void initState() {
-    if (widget.onModelReady != null) {
-      widget.onModelReady(model);
-    }
+    widget.onModelReady!(model);
     super.initState();
   }
 

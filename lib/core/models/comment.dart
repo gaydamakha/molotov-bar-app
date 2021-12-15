@@ -1,11 +1,11 @@
 class Comment {
-  int postId;
-  int id;
-  String name;
-  String email;
-  String body;
+  late int postId;
+  late int id;
+  late String name;
+  late String email;
+  late String body;
 
-  Comment({this.postId, this.id, this.name, this.email, this.body});
+  Comment({required this.postId, required this.id, required this.name, required this.email, required this.body});
 
   Comment.fromJson(Map<String, dynamic> json) {
     postId = json['postId'];

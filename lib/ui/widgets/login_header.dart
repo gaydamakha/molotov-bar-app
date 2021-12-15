@@ -4,9 +4,9 @@ import 'package:cocktail_app/ui/shared/ui_helpers.dart';
 
 class LoginHeader extends StatelessWidget {
   final TextEditingController controller;
-  final String validationMessage;
+  final String? validationMessage;
 
-  const LoginHeader({@required this.controller, this.validationMessage, Key key}): super(key: key);
+  const LoginHeader({required this.controller, this.validationMessage, Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class LoginHeader extends StatelessWidget {
       const Text('Enter a number between 1 - 10', style: subHeaderStyle),
       LoginTextField(controller),
       validationMessage != null
-          ? Text(validationMessage, style: const TextStyle(color: Colors.red))
+          ? Text(validationMessage!, style: const TextStyle(color: Colors.red))
           : Container()
     ]);
   }
@@ -25,7 +25,7 @@ class LoginHeader extends StatelessWidget {
 class LoginTextField extends StatelessWidget {
   final TextEditingController controller;
 
-  const LoginTextField(this.controller, {Key key}): super(key: key);
+  const LoginTextField(this.controller, {Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {

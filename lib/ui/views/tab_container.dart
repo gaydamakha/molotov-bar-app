@@ -4,7 +4,7 @@ import 'package:cocktail_app/ui/views/home_view.dart';
 import 'login_view.dart';
 
 class TabContainer extends StatelessWidget {
-  const TabContainer({Key key}) : super(key: key);
+  const TabContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

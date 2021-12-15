@@ -8,7 +8,7 @@ import 'base_model.dart';
 class CommentsModel extends BaseModel {
   final Api _api = locator<Api>();
 
-  List<Comment> comments;
+  late List<Comment> comments;
 
   Future fetchComments(int postId) async {
     setState(ViewState.Busy);

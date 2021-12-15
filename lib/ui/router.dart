@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:cocktail_app/core/models/post.dart';
 import 'package:cocktail_app/ui/views/home_view.dart';
 import 'package:cocktail_app/ui/views/login_view.dart';
@@ -13,7 +12,7 @@ class Router {
       case '/':
         return MaterialPageRoute(builder: (_) => const HomeView());
       case 'login':
-        return MaterialPageRoute(builder: (_) => LoginView());
+        return MaterialPageRoute(builder: (_) => const LoginView());
       case 'post':
         var post = settings.arguments as Post;
         return MaterialPageRoute(builder: (_) => PostView(post: post));

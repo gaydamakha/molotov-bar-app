@@ -6,7 +6,7 @@ import 'api.dart';
 class PostsService {
   final Api _api = locator<Api>();
 
-  List<Post> _posts;
+  late List<Post> _posts;
   List<Post> get posts => _posts;
 
   Future getPostsForUser(int userId) async {

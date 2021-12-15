@@ -7,7 +7,7 @@ import '../../locator.dart';
 class LoginModel extends BaseModel {
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
-  String errorMessage;
+  late String errorMessage;
 
   Future<bool> login(String userIdText) async {
     setState(ViewState.Busy);
