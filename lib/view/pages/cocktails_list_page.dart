@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:molotov_bar/core/model_data.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
+import 'package:molotov_bar/view/widgets/search_bar.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,6 @@ class CocktailsListPage extends StatefulWidget {
 }
 
 class _CocktailsListPageState extends State<CocktailsListPage> {
-
   Widget getCocktailsWidget(BuildContext context, ModelData modelData) {
     List<Cocktail>? cocktailsList = modelData.data as List<Cocktail>?;
     switch (modelData.status) {
@@ -63,8 +63,8 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _inputController = TextEditingController();
     ModelData modelData = Provider.of<CocktailsViewModel>(context).modelData;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -77,37 +77,24 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary.withAlpha(50),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    child: TextField( //TODO: make it more sexy
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.grey,
-                        ),
-                        controller: _inputController,
-                        onChanged: (value) {},
-                        onSubmitted: (value) {
-                          if (value.isNotEmpty) {
-                            Provider.of<CocktailsViewModel>(context, listen: false)
-                                .setSelectedCocktail(null);
-                            Provider.of<CocktailsViewModel>(context, listen: false)
-                                .fetchCocktailsData(value);
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                          ),
-                          hintText: 'Enter cocktail name',
-                        )),
-                  ),
+                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withAlpha(50),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: SearchBar(onSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          Provider.of<CocktailsViewModel>(context,
+                                  listen: false)
+                              .setSelectedCocktail(null);
+                          Provider.of<CocktailsViewModel>(context,
+                                  listen: false)
+                              .fetchCocktailsData(value);
+                        }
+                      })),
                 ),
               ],
             ),
