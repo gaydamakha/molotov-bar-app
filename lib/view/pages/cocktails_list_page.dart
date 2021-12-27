@@ -7,9 +7,7 @@ import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CocktailsListPage extends StatefulWidget {
-  const CocktailsListPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const CocktailsListPage({Key? key}) : super(key: key);
 
   @override
   State<CocktailsListPage> createState() => _CocktailsListPageState();
@@ -67,7 +65,7 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text("molotov.bar"),
       ),
       body: Column(
         children: <Widget>[
