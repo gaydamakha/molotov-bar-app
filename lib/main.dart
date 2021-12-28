@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:molotov_bar/theme/app_theme.dart';
 import 'package:molotov_bar/view/pages/cocktails_list_page.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +19,7 @@ class MolotovBarApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Molotov.bar',
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(),
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.yellow)
-              .copyWith(secondary: Colors.deepOrange),
-        ),
+        theme: AppTheme.darkTheme,
         initialRoute: '/',
         routes: {
           '/': (context) => const CocktailsListPage(title: 'Molotov Bar'),
