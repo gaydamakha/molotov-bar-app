@@ -10,29 +10,22 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      appBarBuilder: (_, tabsRouter) => AppBar(
-        backgroundColor: Colors.indigo,
-        title: const Text('FlutterBottomNav'),
-        centerTitle: true,
-        leading: const AutoBackButton(),
-      ),
-      backgroundColor: Colors.indigo,
+      backgroundColor: Colors.amberAccent,
       routes: const [
         CocktailsRouter(),
-        IngredientsRouter(),
         FavoritesRouter(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return SalomonBottomBar(
           margin: const EdgeInsets.symmetric(
             horizontal: 20,
-            vertical: 40,
+            vertical: 20,
           ),
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
           items: [
             SalomonBottomBarItem(
-              selectedColor: Colors.amberAccent,
+              selectedColor: Colors.black,
               icon: const Icon(
                 FontAwesomeIcons.cocktail,
                 size: 30,
@@ -40,15 +33,7 @@ class HomePage extends StatelessWidget {
               title: const Text('Cocktails'),
             ),
             SalomonBottomBarItem(
-              selectedColor: Colors.blue[200],
-              icon: const Icon(
-                Icons.person,
-                size: 30,
-              ),
-              title: const Text('Ingredients'),
-            ),
-            SalomonBottomBarItem(
-              selectedColor: Colors.pinkAccent[100],
+              selectedColor: Colors.black,
               icon: const Icon(
                 Icons.favorite,
                 size: 30,
