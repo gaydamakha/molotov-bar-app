@@ -37,7 +37,7 @@ dependencies:
   http: ^0.13.4
   provider: ^5.0.0
   auto_route: ^3.2.0
-  salomon_bottom_bar: ^3.1.0
+  salomon_bottom_bar: ^3.2.0
 
 dev_dependencies:
   flutter_test:

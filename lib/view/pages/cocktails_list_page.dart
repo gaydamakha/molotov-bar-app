@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:molotov_bar/core/model_data.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/view/widgets/search_bar.dart';
@@ -64,9 +63,6 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
     ModelData modelData = Provider.of<CocktailsViewModel>(context).modelData;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("molotov.bar"),
-      ),
       body: Column(
         children: <Widget>[
           Padding(
@@ -99,21 +95,7 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
           ),
           Expanded(child: getCocktailsWidget(context, modelData)),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.cocktail),
-            label: "Cocktails",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: "Favorites",
-          ),
-        ],
-      ),
+      )
     );
   }
 }
