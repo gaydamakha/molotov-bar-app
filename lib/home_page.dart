@@ -10,7 +10,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      backgroundColor: Colors.amberAccent,
       routes: const [
         CocktailsRouter(),
         FavoritesRouter(),
