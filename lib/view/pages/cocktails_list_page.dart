@@ -8,8 +8,6 @@ import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
-import 'cocktail_detail_page.dart';
-
 class CocktailsListPage extends StatefulWidget {
   const CocktailsListPage({Key? key}) : super(key: key);
 
@@ -29,10 +27,13 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
           children: [
             //TODO cocktail preview widget
             Text(cocktailsList!.length.toString()),
-    CocktailTile(name: "Punch à la mirabelle",
-      imageUrl: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
-      onTileTap: () => context.router.push(CocktailDetailRoute(drinkId: 1)),
-    ),
+            CocktailTile(
+              name: "Punch à la mirabelle",
+              imageUrl:
+                  "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
+              onTileTap: () =>
+                  context.router.push(CocktailDetailRoute(drinkId: 1)),
+            ),
           ],
           // children: [
           //   Expanded(
@@ -72,39 +73,22 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
     ModelData modelData = Provider.of<CocktailsViewModel>(context).modelData;
 
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .secondary
-                            .withAlpha(50),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: SearchBar(onSubmitted: (value) {
-                        if (value.isNotEmpty) {
-                          Provider.of<CocktailsViewModel>(context,
-                                  listen: false)
-                              .setSelectedCocktail(null);
-                          Provider.of<CocktailsViewModel>(context,
-                                  listen: false)
-                              .fetchCocktailsData(value);
-                        }
-                      })),
-                ),
-              ],
-            ),
-          ),
-          Expanded(child: getCocktailsWidget(context, modelData)),
-        ],
-      )
-    );
+        body: SafeArea(
+            child: Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: SearchBar(onSubmitted: (value) {
+            if (value.isNotEmpty) {
+              Provider.of<CocktailsViewModel>(context, listen: false)
+                  .setSelectedCocktail(null);
+              Provider.of<CocktailsViewModel>(context, listen: false)
+                  .fetchCocktailsData(value);
+            }
+          }),
+        ),
+        Expanded(child: getCocktailsWidget(context, modelData)),
+      ],
+    )));
   }
 }

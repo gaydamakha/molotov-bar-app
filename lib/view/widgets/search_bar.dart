@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:molotov_bar/theme/app_colors.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function(dynamic) onSubmitted;
@@ -9,23 +10,26 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final _inputController = TextEditingController();
 
-    return TextField( //TODO: make it more sexy
-        style: const TextStyle(
-          fontSize: 15.0,
-          color: Colors.grey,
+    return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 22.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(13.0),
+          color: AppColors.gray,
         ),
-        controller: _inputController,
-        onChanged: (value) {},
-        onSubmitted: (value) => onSubmitted(value),
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.grey,
-          ),
-          hintText: 'Enter cocktail name',
-        ));
+        child: TextField(
+            style: const TextStyle(
+              fontSize: 20,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            controller: _inputController,
+            onChanged: (value) {},
+            onSubmitted: (value) => onSubmitted(value),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              prefixIcon: Icon(Icons.search),
+              suffixIcon: Icon(Icons.tune),
+            )));
   }
 }

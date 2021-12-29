@@ -19,10 +19,10 @@ class HomePage extends StatelessWidget {
         return Container(
           color: AppColors.darkGray,
             child: SalomonBottomBar(
-          selectedItemColor: AppColors.yellow,
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
           margin: const EdgeInsets.symmetric(
             horizontal: 40,
-            vertical: 15,
+            vertical: 10,
           ),
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
@@ -30,14 +30,14 @@ class HomePage extends StatelessWidget {
             SalomonBottomBarItem(
               icon: const Icon(
                 FontAwesomeIcons.cocktail,
-                size: 30,
+                size: 25,
               ),
               title: const Text('Cocktails'),
             ),
             SalomonBottomBarItem(
               icon: const Icon(
                 Icons.favorite,
-                size: 30,
+                size: 25,
               ),
               title: const Text('Favorites'),
             )
