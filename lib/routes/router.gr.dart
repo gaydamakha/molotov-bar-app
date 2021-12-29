@@ -12,9 +12,9 @@ import 'package:auto_route/auto_route.dart' as _i2;
 import 'package:flutter/material.dart' as _i6;
 
 import '../home_page.dart' as _i1;
-import '../view/pages/cocktail_detail_page.dart' as _i5;
-import '../view/pages/cocktails_list_page.dart' as _i4;
-import '../view/pages/favorites_list_page.dart' as _i3;
+import '../view/pages/cocktail_detail_page.dart' as _i4;
+import '../view/pages/cocktails_list_page.dart' as _i3;
+import '../view/pages/favorites_list_page.dart' as _i5;
 
 class AppRouter extends _i2.RootStackRouter {
   AppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
@@ -32,11 +32,11 @@ class AppRouter extends _i2.RootStackRouter {
     },
     FavoritesRouter.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i3.FavoritesListPage());
+          routeData: routeData, child: const _i2.EmptyRouterPage());
     },
     CocktailsListRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i4.CocktailsListPage());
+          routeData: routeData, child: const _i3.CocktailsListPage());
     },
     CocktailDetailRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
@@ -45,7 +45,11 @@ class AppRouter extends _i2.RootStackRouter {
               CocktailDetailRouteArgs(drinkId: pathParams.getInt('drinkId')));
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i5.CocktailDetailPage(key: args.key, drinkId: args.drinkId));
+          child: _i4.CocktailDetailPage(key: args.key, drinkId: args.drinkId));
+    },
+    FavoritesListRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i5.FavoritesListPage());
     }
   };
 
@@ -62,7 +66,14 @@ class AppRouter extends _i2.RootStackRouter {
                     path: ':drinkId', parent: CocktailsRouter.name)
               ]),
           _i2.RouteConfig(FavoritesRouter.name,
-              path: 'favorites', parent: HomeRoute.name)
+              path: 'favorites',
+              parent: HomeRoute.name,
+              children: [
+                _i2.RouteConfig(FavoritesListRoute.name,
+                    path: '', parent: FavoritesRouter.name),
+                _i2.RouteConfig(CocktailDetailRoute.name,
+                    path: ':drinkId', parent: FavoritesRouter.name)
+              ])
         ])
       ];
 }
@@ -87,15 +98,17 @@ class CocktailsRouter extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.FavoritesListPage]
+/// [_i2.EmptyRouterPage]
 class FavoritesRouter extends _i2.PageRouteInfo<void> {
-  const FavoritesRouter() : super(FavoritesRouter.name, path: 'favorites');
+  const FavoritesRouter({List<_i2.PageRouteInfo>? children})
+      : super(FavoritesRouter.name,
+            path: 'favorites', initialChildren: children);
 
   static const String name = 'FavoritesRouter';
 }
 
 /// generated route for
-/// [_i4.CocktailsListPage]
+/// [_i3.CocktailsListPage]
 class CocktailsListRoute extends _i2.PageRouteInfo<void> {
   const CocktailsListRoute() : super(CocktailsListRoute.name, path: '');
 
@@ -103,7 +116,7 @@ class CocktailsListRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.CocktailDetailPage]
+/// [_i4.CocktailDetailPage]
 class CocktailDetailRoute extends _i2.PageRouteInfo<CocktailDetailRouteArgs> {
   CocktailDetailRoute({_i6.Key? key, required int drinkId})
       : super(CocktailDetailRoute.name,
@@ -125,4 +138,12 @@ class CocktailDetailRouteArgs {
   String toString() {
     return 'CocktailDetailRouteArgs{key: $key, drinkId: $drinkId}';
   }
+}
+
+/// generated route for
+/// [_i5.FavoritesListPage]
+class FavoritesListRoute extends _i2.PageRouteInfo<void> {
+  const FavoritesListRoute() : super(FavoritesListRoute.name, path: '');
+
+  static const String name = 'FavoritesListRoute';
 }

@@ -26,7 +26,17 @@ import 'package:molotov_bar/view/pages/favorites_list_page.dart';
       AutoRoute(
         path: 'favorites',
         name: 'FavoritesRouter',
-        page: FavoritesListPage,
+        page: EmptyRouterPage,
+        children: [
+          AutoRoute(
+            path: '',
+            page: FavoritesListPage,
+          ),
+          AutoRoute(
+            path: ':drinkId',
+            page: CocktailDetailPage,
+          )
+        ]
       )
     ]),
   ],
