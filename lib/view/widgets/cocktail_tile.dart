@@ -34,22 +34,20 @@ class CocktailTile extends StatelessWidget {
                 ),
               ),
               child: Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w300,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      )
-                    ],
-                  )))),
+                padding: const EdgeInsets.all(5.0),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    name,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ))),
     );
   }
 }
