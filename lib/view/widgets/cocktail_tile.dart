@@ -14,6 +14,7 @@ class CocktailTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return InkWell(
       onTap: onTileTap,
       child: Card(
@@ -37,15 +38,30 @@ class CocktailTile extends StatelessWidget {
                 padding: const EdgeInsets.all(5.0),
                 child: Align(
                   alignment: Alignment.bottomLeft,
-                  child: Text(
-                    name,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [
+                          0,1
+                        ],
+                        colors: [
+                          Colors.transparent,
+                          Colors.black,
+                        ]
+                      )
                     ),
-                    textAlign: TextAlign.left,
-                  ),
+                    child:Text(
+                      name,
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  )
                 ),
               ))),
     );
