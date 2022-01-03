@@ -1,8 +1,12 @@
 class Cocktail {
-  Cocktail();
+  final int id;
+  final String title;
+  final String imageUrl;
 
-  factory Cocktail.fromJson(Map<String, dynamic> json) {
-    //TODO
-    return Cocktail();
-  }
+  const Cocktail(this.id, this.title, this.imageUrl);
+
+//TODO
+// factory Cocktail.fromJson(Map<String, dynamic> json) {
+//   return Cocktail();
+// }
 }

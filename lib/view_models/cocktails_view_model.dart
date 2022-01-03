@@ -1,40 +1,73 @@
 import 'package:flutter/foundation.dart';
-import 'package:molotov_bar/core/model_data.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
+import 'package:molotov_bar/core/models/cocktail_error.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/http_cocktail_repository.dart';
 
-class CocktailsViewModel with ChangeNotifier {
-  ModelData _modelData = ModelData.initial('Empty data');
+class CocktailsViewModel extends ChangeNotifier {
+  bool _loading = false;
+  List<Cocktail> _cocktailsList = [];
+  CocktailError? _cocktailError;
 
-  CocktailRepository cocktailRepository = HttpCocktailRepository(); //todo put somewhere in DI
+  bool get loading => _loading;
 
-  Cocktail? _cocktail;
+  List<Cocktail> get cocktailsList => _cocktailsList;
 
-  ModelData get modelData {
-    return _modelData;
+  CocktailError? get cocktailError => _cocktailError;
+
+  final CocktailRepository _cocktailRepository = HttpCocktailRepository(); //todo put somewhere in DI
+
+  CocktailsViewModel() {
+    initCocktailsList();
   }
 
-  Cocktail? get cocktail {
-    return _cocktail;
+  setLoading(bool loading) async {
+    _loading = loading;
+    notifyListeners();
+  }
+
+  setCocktailsList(List<Cocktail> cocktailsList) {
+    _cocktailsList = cocktailsList;
+  }
+
+  setCocktailError(CocktailError cocktailError) {
+    _cocktailError = cocktailError;
   }
 
   /// Call the cocktail repository and gets the data of requested cocktails f
   /// an artist.
-  Future<void> fetchCocktailsData(String value) async {
-    _modelData = ModelData.loading('Fetching artist data');
-    notifyListeners();
+  Future<void> searchCocktails(String value) async {
+    setLoading(true);
+    var response = await _cocktailRepository.search(value);
     try {
-      List<Cocktail> cocktails = await cocktailRepository.getAll();
-      _modelData = ModelData.completed(cocktails);
-    } catch (e) {
-      _modelData = ModelData.error(e.toString());
+      setCocktailsList(response);
+    } on Exception {
+      var error = CocktailError(
+        code: 111,
+        message: 'error',
+      );
+      setCocktailError(error);
     }
-    notifyListeners();
+    setLoading(false);
   }
 
-  void setSelectedCocktail(Cocktail? cocktail) {
-    _cocktail = cocktail;
-    notifyListeners();
+  // void setSelectedCocktail(Cocktail? cocktail) {
+  //   _cocktail = cocktail;
+  //   notifyListeners();
+  // }
+
+  initCocktailsList() async {
+    setLoading(true);
+    var response = await _cocktailRepository.getAll();
+    try {
+      setCocktailsList(response);
+    } on Exception {
+      var error = CocktailError(
+          code: 111,
+          message: 'error',
+      );
+      setCocktailError(error);
+    }
+    setLoading(false);
   }
 }

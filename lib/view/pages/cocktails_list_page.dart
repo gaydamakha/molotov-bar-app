@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:molotov_bar/core/model_data.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/routes/router.gr.dart';
 import 'package:molotov_bar/view/widgets/cocktail_tile.dart';
@@ -16,62 +15,9 @@ class CocktailsListPage extends StatefulWidget {
 }
 
 class _CocktailsListPageState extends State<CocktailsListPage> {
-  Widget getCocktailsWidget(BuildContext context, ModelData modelData) {
-    List<Cocktail>? cocktailsList = modelData.data as List<Cocktail>?;
-    switch (modelData.status) {
-      case Status.loading:
-        return const Center(child: CircularProgressIndicator());
-      case Status.completed:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            //TODO cocktail preview widget
-            Text(cocktailsList!.length.toString()),
-            CocktailTile(
-              name: "Punch à la mirabelle",
-              imageUrl:
-                  "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
-              onTileTap: () =>
-                  context.router.push(CocktailDetailRoute(drinkId: 1)),
-            ),
-          ],
-          // children: [
-          //   Expanded(
-          //     // flex: 8,
-          //     // child: PlayerListWidget(cocktailsList!, (Media media) {
-          //     //   Provider.of<MediaViewModel>(context, listen: false)
-          //     //       .setSelectedMedia(media);
-          //     // }),
-          //   ),
-          //   Expanded(
-          //     flex: 2,
-          //     child: Align(
-          //       alignment: Alignment.bottomCenter,
-          //       child: PlayerWidget(
-          //         function: () {
-          //           setState(() {});
-          //         },
-          //       ),
-          //     ),
-          //   ),
-          // ],
-        );
-      case Status.error:
-        return const Center(
-          child: Text('Please try again latter!!!'),
-        );
-      case Status.initial:
-      default:
-        return const Center(
-          child: Text('Search the cocktail by name'),
-        );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    ModelData modelData = Provider.of<CocktailsViewModel>(context).modelData;
-
+    CocktailsViewModel cocktailsViewModel = context.watch<CocktailsViewModel>();
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -80,15 +26,38 @@ class _CocktailsListPageState extends State<CocktailsListPage> {
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: SearchBar(onSubmitted: (value) {
             if (value.isNotEmpty) {
-              Provider.of<CocktailsViewModel>(context, listen: false)
-                  .setSelectedCocktail(null);
-              Provider.of<CocktailsViewModel>(context, listen: false)
-                  .fetchCocktailsData(value);
+              cocktailsViewModel.searchCocktails(value);
             }
           }),
         ),
-        Expanded(child: getCocktailsWidget(context, modelData)),
+        Expanded(
+            child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [_ui(cocktailsViewModel)],
+        )),
       ],
     )));
+  }
+
+  Widget _ui(CocktailsViewModel cocktailsViewModel) {
+    if (cocktailsViewModel.loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (cocktailsViewModel.cocktailError != null) {
+      return Text(cocktailsViewModel.cocktailError!.message);
+    }
+    // return
+    return Expanded(
+        child: ListView.separated(
+            itemBuilder: (context, index) {
+              Cocktail cocktail = cocktailsViewModel.cocktailsList[index];
+              return CocktailTile(
+                name: cocktail.title,
+                imageUrl: cocktail.imageUrl,
+                onTileTap: () => context.router.push(CocktailDetailRoute(drinkId: cocktail.id)),
+              );
+            },
+            separatorBuilder: (context, index) => const Divider(),
+            itemCount: cocktailsViewModel.cocktailsList.length));
   }
 }

@@ -16,7 +16,7 @@ class MolotovBarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider.value(value: CocktailsViewModel()),
+          ChangeNotifierProvider(create: (_) => CocktailsViewModel()),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
