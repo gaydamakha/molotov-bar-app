@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:molotov_bar/home_page.dart';
 import 'package:molotov_bar/view/pages/cocktail_detail_page.dart';
-import 'package:molotov_bar/view/pages/cocktails_list_page.dart';
+import 'package:molotov_bar/view/pages/cocktails_search_page.dart';
 import 'package:molotov_bar/view/pages/favorites_list_page.dart';
 
 @MaterialAutoRouter(
@@ -15,7 +15,7 @@ import 'package:molotov_bar/view/pages/favorites_list_page.dart';
         children: [
           AutoRoute(
             path: '',
-            page: CocktailsListPage,
+            page: CocktailsSearchPage,
           ),
           AutoRoute(
             path: ':drinkId',

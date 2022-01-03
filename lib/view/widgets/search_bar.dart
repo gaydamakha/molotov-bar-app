@@ -11,7 +11,6 @@ class SearchBar extends StatelessWidget {
     final _inputController = TextEditingController();
 
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 22.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(13.0),
           color: AppColors.gray,

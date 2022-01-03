@@ -13,7 +13,7 @@ import 'package:flutter/material.dart' as _i6;
 
 import '../home_page.dart' as _i1;
 import '../view/pages/cocktail_detail_page.dart' as _i4;
-import '../view/pages/cocktails_list_page.dart' as _i3;
+import '../view/pages/cocktails_search_page.dart' as _i3;
 import '../view/pages/favorites_list_page.dart' as _i5;
 
 class AppRouter extends _i2.RootStackRouter {
@@ -36,7 +36,7 @@ class AppRouter extends _i2.RootStackRouter {
     },
     CocktailsListRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i3.CocktailsListPage());
+          routeData: routeData, child: const _i3.CocktailsSearchPage());
     },
     CocktailDetailRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
@@ -108,7 +108,7 @@ class FavoritesRouter extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.CocktailsListPage]
+/// [_i3.CocktailsSearchPage]
 class CocktailsListRoute extends _i2.PageRouteInfo<void> {
   const CocktailsListRoute() : super(CocktailsListRoute.name, path: '');
 
