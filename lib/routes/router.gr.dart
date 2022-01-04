@@ -13,6 +13,7 @@
 import 'package:auto_route/auto_route.dart' as _i2;
 import 'package:flutter/material.dart' as _i6;
 
+import '../core/models/cocktail.dart' as _i7;
 import '../home_page.dart' as _i1;
 import '../view/pages/cocktail_detail_page.dart' as _i4;
 import '../view/pages/cocktails_search_page.dart' as _i3;
@@ -41,13 +42,11 @@ class AppRouter extends _i2.RootStackRouter {
           routeData: routeData, child: const _i3.CocktailsSearchPage());
     },
     CocktailDetailRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<CocktailDetailRouteArgs>(
-          orElse: () =>
-              CocktailDetailRouteArgs(name: pathParams.getString('name')));
+      final args = routeData.argsAs<CocktailDetailRouteArgs>();
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i4.CocktailDetailPage(key: args.key, name: args.name));
+          child:
+              _i4.CocktailDetailPage(key: args.key, cocktail: args.cocktail));
     },
     FavoritesListRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -65,7 +64,7 @@ class AppRouter extends _i2.RootStackRouter {
                 _i2.RouteConfig(CocktailsSearchRoute.name,
                     path: '', parent: CocktailsRouter.name),
                 _i2.RouteConfig(CocktailDetailRoute.name,
-                    path: ':name', parent: CocktailsRouter.name)
+                    path: 'cocktail-detail-page', parent: CocktailsRouter.name)
               ]),
           _i2.RouteConfig(FavoritesRouter.name,
               path: 'favorites',
@@ -74,7 +73,7 @@ class AppRouter extends _i2.RootStackRouter {
                 _i2.RouteConfig(FavoritesListRoute.name,
                     path: '', parent: FavoritesRouter.name),
                 _i2.RouteConfig(CocktailDetailRoute.name,
-                    path: ':name', parent: FavoritesRouter.name)
+                    path: 'cocktail-detail-page', parent: FavoritesRouter.name)
               ])
         ])
       ];
@@ -120,25 +119,24 @@ class CocktailsSearchRoute extends _i2.PageRouteInfo<void> {
 /// generated route for
 /// [_i4.CocktailDetailPage]
 class CocktailDetailRoute extends _i2.PageRouteInfo<CocktailDetailRouteArgs> {
-  CocktailDetailRoute({_i6.Key? key, required String name})
+  CocktailDetailRoute({_i6.Key? key, required _i7.Cocktail cocktail})
       : super(CocktailDetailRoute.name,
-            path: ':name',
-            args: CocktailDetailRouteArgs(key: key, name: name),
-            rawPathParams: {'name': name});
+            path: 'cocktail-detail-page',
+            args: CocktailDetailRouteArgs(key: key, cocktail: cocktail));
 
   static const String name = 'CocktailDetailRoute';
 }
 
 class CocktailDetailRouteArgs {
-  const CocktailDetailRouteArgs({this.key, required this.name});
+  const CocktailDetailRouteArgs({this.key, required this.cocktail});
 
   final _i6.Key? key;
 
-  final String name;
+  final _i7.Cocktail cocktail;
 
   @override
   String toString() {
-    return 'CocktailDetailRouteArgs{key: $key, name: $name}';
+    return 'CocktailDetailRouteArgs{key: $key, cocktail: $cocktail}';
   }
 }
 

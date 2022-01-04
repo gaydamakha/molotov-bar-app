@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/annotations.dart';
+import 'package:molotov_bar/core/models/cocktail.dart';
 
 class CocktailDetailPage extends StatelessWidget {
-  final String name;
+  final Cocktail cocktail;
 
   const CocktailDetailPage({
     Key? key,
-    @PathParam() required this.name,
+    required this.cocktail,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text("plop");
+    return Scaffold(
+      body: SafeArea(
+          child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(cocktail.imageUrl),
+                  fit: BoxFit.cover,
+                ),
+              )
+          )
+      ),
+    );
   }
 }
