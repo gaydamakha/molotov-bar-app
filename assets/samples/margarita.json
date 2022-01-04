@@ -1,0 +1,72 @@
+{
+  "name" : "MARGARITA",
+  "title" : "Margarita",
+  "imageUrl": "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
+  "ingredients": [
+    {
+      "name": "TEQUILA",
+      "title": "Tequila",
+      "category": {
+        "title": "SPIRITS",
+        "name": "Spirits"
+      },
+      "measurement": "oz",
+      "quantity": 1.5
+    },
+    {
+      "name": "TRIPLE_SEC",
+      "title": "Triple Sec",
+      "category": {
+        "title": "SPIRITS",
+        "name": "Spirits"
+      },
+      "measurement": "oz",
+      "quantity": 0.5
+    },
+    {
+      "name": "LIME_JUICE",
+      "title": "Lime juice",
+      "category": {
+        "title": "JUICES",
+        "name": "Juices"
+      },
+      "measurement": "oz",
+      "quantity": 1
+    },
+    {
+      "name": "SALT",
+      "title": "Salt",
+      "category": {
+        "title": "SEASONINGS",
+        "name": "Seasonings"
+      }
+    }
+  ],
+  "optionalIngredients": [],
+  "description": "",
+  "recipe" : "Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the outer rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass.",
+  "glasses": [
+    {
+      "name": "COCKTAIL_GLASS",
+      "title": "Cocktail glass"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ContemporaryClassic",
+      "title": "Contemporary Classics"
+    },
+    {
+      "name": "IBA",
+      "title": "IBA"
+    }
+  ],
+  "alcoholDegree": 10,
+  "alcoholCocktailType": "ALCOHOLIC",
+  "categories": [
+    {
+      "name": "ORDINARY",
+      "title": "Ordinary Drink"
+    }
+  ]
+}

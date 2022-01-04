@@ -7,6 +7,8 @@
 // **************************************************************************
 // AutoRouteGenerator
 // **************************************************************************
+//
+// ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i2;
 import 'package:flutter/material.dart' as _i6;
@@ -34,7 +36,7 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i2.EmptyRouterPage());
     },
-    CocktailsListRoute.name: (routeData) {
+    CocktailsSearchRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i3.CocktailsSearchPage());
     },
@@ -42,10 +44,10 @@ class AppRouter extends _i2.RootStackRouter {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<CocktailDetailRouteArgs>(
           orElse: () =>
-              CocktailDetailRouteArgs(drinkId: pathParams.getInt('drinkId')));
+              CocktailDetailRouteArgs(name: pathParams.getString('name')));
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i4.CocktailDetailPage(key: args.key, drinkId: args.drinkId));
+          child: _i4.CocktailDetailPage(key: args.key, name: args.name));
     },
     FavoritesListRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -60,10 +62,10 @@ class AppRouter extends _i2.RootStackRouter {
               path: 'cocktails',
               parent: HomeRoute.name,
               children: [
-                _i2.RouteConfig(CocktailsListRoute.name,
+                _i2.RouteConfig(CocktailsSearchRoute.name,
                     path: '', parent: CocktailsRouter.name),
                 _i2.RouteConfig(CocktailDetailRoute.name,
-                    path: ':drinkId', parent: CocktailsRouter.name)
+                    path: ':name', parent: CocktailsRouter.name)
               ]),
           _i2.RouteConfig(FavoritesRouter.name,
               path: 'favorites',
@@ -72,7 +74,7 @@ class AppRouter extends _i2.RootStackRouter {
                 _i2.RouteConfig(FavoritesListRoute.name,
                     path: '', parent: FavoritesRouter.name),
                 _i2.RouteConfig(CocktailDetailRoute.name,
-                    path: ':drinkId', parent: FavoritesRouter.name)
+                    path: ':name', parent: FavoritesRouter.name)
               ])
         ])
       ];
@@ -109,34 +111,34 @@ class FavoritesRouter extends _i2.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CocktailsSearchPage]
-class CocktailsListRoute extends _i2.PageRouteInfo<void> {
-  const CocktailsListRoute() : super(CocktailsListRoute.name, path: '');
+class CocktailsSearchRoute extends _i2.PageRouteInfo<void> {
+  const CocktailsSearchRoute() : super(CocktailsSearchRoute.name, path: '');
 
-  static const String name = 'CocktailsListRoute';
+  static const String name = 'CocktailsSearchRoute';
 }
 
 /// generated route for
 /// [_i4.CocktailDetailPage]
 class CocktailDetailRoute extends _i2.PageRouteInfo<CocktailDetailRouteArgs> {
-  CocktailDetailRoute({_i6.Key? key, required int drinkId})
+  CocktailDetailRoute({_i6.Key? key, required String name})
       : super(CocktailDetailRoute.name,
-            path: ':drinkId',
-            args: CocktailDetailRouteArgs(key: key, drinkId: drinkId),
-            rawPathParams: {'drinkId': drinkId});
+            path: ':name',
+            args: CocktailDetailRouteArgs(key: key, name: name),
+            rawPathParams: {'name': name});
 
   static const String name = 'CocktailDetailRoute';
 }
 
 class CocktailDetailRouteArgs {
-  const CocktailDetailRouteArgs({this.key, required this.drinkId});
+  const CocktailDetailRouteArgs({this.key, required this.name});
 
   final _i6.Key? key;
 
-  final int drinkId;
+  final String name;
 
   @override
   String toString() {
-    return 'CocktailDetailRouteArgs{key: $key, drinkId: $drinkId}';
+    return 'CocktailDetailRouteArgs{key: $key, name: $name}';
   }
 }
 

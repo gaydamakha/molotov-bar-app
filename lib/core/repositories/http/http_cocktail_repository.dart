@@ -1,32 +1,35 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/base_http_repository.dart';
 
 class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepository {
   @override
-  Future<List<Cocktail>> getAll() {
+  Future<List<Cocktail>> getAll() async {
     //TODO call http
+    var file = await rootBundle.loadString('samples/margarita.json');
+    final jsonResponse = json.decode(file);
+
     List<Cocktail> cocktails = [
-      const Cocktail(1, "Punch à la mirabelle aosdnasoidasoidpasdmpasmd", "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg"),
-      const Cocktail(2, "Old Fashioned", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg"),
-      const Cocktail(4, "Old Fashioned", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg"),
-      const Cocktail(3, "Punch à la mirabelle", "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg"),
-      const Cocktail(5, "Punch à la mirabelle", "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg"),
-      const Cocktail(6, "Old Fashioned", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg"),
-      const Cocktail(4, "Old Fashioned", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg"),
-      const Cocktail(3, "Punch à la mirabelle", "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg"),
+      Cocktail.fromJson(jsonResponse),
     ];
+
     return Future<List<Cocktail>>(() {
       return cocktails;
     });
   }
 
   @override
-  Future<List<Cocktail>> search(String value) {
+  Future<List<Cocktail>> search(String value) async {
     //TODO call http
+
+    var file = await rootBundle.loadString('samples/margarita.json');
+    final jsonResponse = json.decode(file);
+
     List<Cocktail> cocktails = [
-      const Cocktail(7, "Golden dream", "https://www.thecocktaildb.com/images/media/drink/qrot6j1504369425.jpg"),
-      const Cocktail(8, "Old Pal", "https://www.thecocktaildb.com/images/media/drink/x03td31521761009.jpg"),
+      Cocktail.fromJson(jsonResponse),
     ];
     return Future<List<Cocktail>>(() {
       return cocktails;

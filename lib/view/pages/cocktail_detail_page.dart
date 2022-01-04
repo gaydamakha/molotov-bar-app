@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/annotations.dart';
 
 class CocktailDetailPage extends StatelessWidget {
-  final int drinkId;
+  final String name;
 
   const CocktailDetailPage({
     Key? key,
-    @PathParam() required this.drinkId,
+    @PathParam() required this.name,
   }) : super(key: key);
 
   @override

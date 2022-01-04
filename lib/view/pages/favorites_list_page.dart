@@ -12,7 +12,7 @@ class FavoritesListPage extends StatelessWidget {
       body: SafeArea(
         child: CocktailTile(name: "Punch à la mirabelle",
           imageUrl: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
-          onTileTap: () => context.router.push(CocktailDetailRoute(drinkId: 1)),
+          onTileTap: () => context.router.push(CocktailDetailRoute(name: 'plop')),
         ),
       ),
     );
