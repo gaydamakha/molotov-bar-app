@@ -1,21 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:molotov_bar/routes/router.gr.dart';
-import 'package:molotov_bar/view/pages/cocktail_detail_page.dart';
-import 'package:molotov_bar/view/widgets/cocktail_tile.dart';
-import 'package:auto_route/auto_route.dart';
+import 'package:molotov_bar/view/widgets/cocktails_list.dart';
+import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
+import 'package:provider/provider.dart';
 
-class FavoritesListPage extends StatelessWidget {
+class FavoritesListPage extends StatefulWidget {
   const FavoritesListPage({Key? key}) : super(key: key);
 
   @override
+  State<FavoritesListPage> createState() => _FavoritesListPageState();
+}
+
+class _FavoritesListPageState extends State<FavoritesListPage> {
+  @override
   Widget build(BuildContext context) {
+    FavoriteCocktailsViewModel favoriteCocktailsViewModel = context.watch<FavoriteCocktailsViewModel>();
     return Scaffold(
-      body: SafeArea(
-        child: CocktailTile(name: "Punch à la mirabelle",
-          imageUrl: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
-          onTileTap: () => {}//context.router.push(CocktailDetailRoute(cocktail: cocktail))),
-        ),
-      ),
-    );
+        body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
+                right: 10,
+                left: 10,
+              ),
+              child: Column(children: <Widget>[
+                const SizedBox(height: 10),
+                Flexible(child: _ui(favoriteCocktailsViewModel)),
+              ]),
+            )));
+  }
+
+  Widget _ui(FavoriteCocktailsViewModel favoriteCocktailsViewModel) {
+    if (favoriteCocktailsViewModel.loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (favoriteCocktailsViewModel.cocktailError != null) {
+      return Text(favoriteCocktailsViewModel.cocktailError!.message);
+    }
+    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.cocktailsFavoriteList);
   }
 }

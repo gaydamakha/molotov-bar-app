@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:molotov_bar/routes/router.gr.dart';
 import 'package:molotov_bar/theme/app_theme.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
+import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MolotovBarApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => CocktailsViewModel()),
+          ChangeNotifierProvider(create: (_) => FavoriteCocktailsViewModel())
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
