@@ -22,7 +22,7 @@ class Cocktail {
      json['imageUrl'].toString(),
      json['description'].toString(),
      json['recipe'].toString(),
-     json['alcoholDegree'] as double,
+     json['alcoholDegree'].toDouble(),
      ingredients
    );
   }

@@ -9,7 +9,7 @@ class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepos
   @override
   Future<List<Cocktail>> getAll() async {
     //TODO call http
-    var file = await rootBundle.loadString('samples/margarita.json');
+    var file = await rootBundle.loadString('assets/samples/margarita.json');
     final jsonResponse = json.decode(file);
 
     List<Cocktail> cocktails = [
@@ -25,7 +25,7 @@ class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepos
   Future<List<Cocktail>> search(String value) async {
     //TODO call http
 
-    var file = await rootBundle.loadString('samples/margarita.json');
+    var file = await rootBundle.loadString('assets/samples/margarita.json');
     final jsonResponse = json.decode(file);
 
     List<Cocktail> cocktails = [
