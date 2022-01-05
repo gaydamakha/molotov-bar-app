@@ -4,12 +4,15 @@ import 'package:molotov_bar/theme/app_colors.dart';
 
 class AppTheme {
   static ThemeData get darkTheme {
-    return ThemeData(
-        colorScheme: const ColorScheme.dark(
-            brightness: Brightness.dark,
-            primary: AppColors.lightGray,
-            secondary: AppColors.yellow),
-        fontFamily: 'VisueltPro'
+    var theme = ThemeData(
+      colorScheme: const ColorScheme.dark(
+          brightness: Brightness.dark,
+          primary: AppColors.lightGray,
+          secondary: AppColors.yellow),
+      fontFamily: 'VisueltPro',
     );
+    return theme.copyWith(
+        textTheme: theme.textTheme.apply(
+            displayColor: AppColors.lightGray, fontFamily: 'VisueltPro'));
   }
 }

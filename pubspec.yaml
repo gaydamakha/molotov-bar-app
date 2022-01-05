@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.0.1
   auto_route: ^3.2.0
   salomon_bottom_bar: ^3.2.0
+  flutter_svg: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icons/
     - assets/samples/margarita.json
 
   # To add assets to your application, add an assets section, like this:
