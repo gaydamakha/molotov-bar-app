@@ -20,55 +20,37 @@ class CocktailDetailPage extends StatelessWidget {
         slivers: <Widget>[
           SliverAppBar(
             bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(100.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(23),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
+                preferredSize: const Size.fromHeight(144.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Text(
                           cocktail.title,
                           style: Theme.of(context).textTheme.headline2,
                         ),
-                        Row(
-                            textBaseline: TextBaseline.alphabetic,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(right: 5.0),
-                                  child: SvgPicture.asset(AppIcons.drop,
-                                      height: 20)),
-                              Text(
-                                cocktail.alcoholDegree.toString() + " %",
-                                style: Theme.of(context).textTheme.headline5,
-                              )
-                            ]),
-                        Row(
-                            textBaseline: TextBaseline.alphabetic,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(right: 5.0),
-                                  child: SvgPicture.asset(AppIcons.list,
-                                      height: 20)),
-                              Text(
-                                cocktail.categories[0],
-                                style: Theme.of(context).textTheme.headline5,
-                              )
-                            ])
-                      ]),
-                )),
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset(AppIcons.drop, height: 20),
+                        title: Text(
+                          cocktail.alcoholDegree.toString() + " %",
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                        minLeadingWidth: 0,
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset(AppIcons.list, height: 20),
+                        title: Text(
+                          cocktail.categories[0],
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                        minLeadingWidth: 0,
+                      ),
+                    ])),
             stretch: true,
-            // onStretchTrigger: () {
-            //   // Function callback for stretch
-            //   return Future<void>.value();
-            // },
             expandedHeight: MediaQuery.of(context).size.height * 0.4,
-            // shape: const RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.all(
-            //       Radius.circular(-15.0),
-            //     )),
             flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
               stretchModes: const <StretchMode>[
                 StretchMode.zoomBackground,
                 StretchMode.blurBackground,
