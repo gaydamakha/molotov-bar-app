@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/theme/app_icons.dart';
+import 'package:auto_route/auto_route.dart';
 
 class CocktailDetailPage extends StatelessWidget {
   final Cocktail cocktail;
@@ -14,11 +15,45 @@ class CocktailDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              backgroundColor:
+                  Theme.of(context).backgroundColor.withOpacity(0.6),
+              onPressed: () {
+                context.router.pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).primaryColor,
+                size: 25,
+              ),
+            ),
+            FloatingActionButton(
+              backgroundColor:
+                  Theme.of(context).backgroundColor.withOpacity(0.6),
+              onPressed: () {
+                /* Do something */
+              },
+              child: Icon(
+                Icons.favorite_border,
+                color: Theme.of(context).primaryColor,
+                size: 25,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[
           SliverAppBar(
+            automaticallyImplyLeading: false,
             bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(144.0),
                 child: Column(
@@ -79,71 +114,37 @@ class CocktailDetailPage extends StatelessWidget {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              const <Widget>[
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Sunday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.wb_sunny),
-                  title: Text('Monday'),
-                  subtitle: Text('sunny, h: 80, l: 65'),
-                ),
-                // ListTiles++
-              ],
+          SliverPadding(
+            padding: const EdgeInsets.only(
+              left: 24,
+              top: 24,
+              right: 24,
+            ),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                <Widget>[
+                  Text("Ingredients",
+                      style: Theme.of(context).textTheme.headline4),
+                  ListBody(
+                    children: cocktail.ingredients.map((ingredient) {
+                      return ListTile(
+                        visualDensity: const VisualDensity(
+                            horizontal: -4.0, vertical: -4.0),
+                        title: Text([
+                          ingredient.title,
+                          ingredient.quantity?.toString(),
+                          ingredient.measurement
+                        ].where((e) => e != null).join(" ")),
+                      );
+                    }).toList(),
+                  ),
+                  Text("Recipe", style: Theme.of(context).textTheme.headline4),
+                  ListTile(
+                    title: Text(cocktail.recipe,
+                        style: const TextStyle(fontSize: 16, height: 1.2)),
+                  )
+                ],
+              ),
             ),
           ),
         ],
