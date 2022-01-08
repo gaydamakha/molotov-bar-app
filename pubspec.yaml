@@ -32,6 +32,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  get_it: ^7.2.0
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^9.2.0
   http: ^0.13.4
@@ -66,7 +67,7 @@ flutter:
 
   assets:
     - assets/icons/
-    - assets/samples/margarita.json
+    - assets/samples/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -85,36 +86,36 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  - family: VisueltPro
-    fonts:
-      - asset: assets/fonts/VisueltPro-Black.ttf
-        weight: 700
-      - asset: assets/fonts/VisueltPro-BlackItalic.ttf
-        weight: 700
-      - asset: assets/fonts/VisueltPro-Bold.ttf
-        weight: 600
-      - asset: assets/fonts/VisueltPro-BoldItalic.ttf
-        weight: 600
-      - asset: assets/fonts/VisueltPro-Medium.ttf
-        weight: 500
-      - asset: assets/fonts/VisueltPro-MediumItalic.ttf
-        weight: 500
-      - asset: assets/fonts/VisueltPro-Regular.ttf
-        weight: 400
-      - asset: assets/fonts/VisueltPro-Italic.ttf
-        weight: 400
-      - asset: assets/fonts/VisueltPro-Light.ttf
-        weight: 300
-      - asset: assets/fonts/VisueltPro-LightItalic.ttf
-        weight: 300
-      - asset: assets/fonts/VisueltPro-ExtraLight.ttf
-        weight: 200
-      - asset: assets/fonts/VisueltPro-ExtraLightItalic.ttf
-        weight: 200
-      - asset: assets/fonts/VisueltPro-Thin.ttf
-        weight: 100
-      - asset: assets/fonts/VisueltPro-ThinItalic.ttf
-        weight: 100
+    - family: VisueltPro
+      fonts:
+        - asset: assets/fonts/VisueltPro-Black.ttf
+          weight: 700
+        - asset: assets/fonts/VisueltPro-BlackItalic.ttf
+          weight: 700
+        - asset: assets/fonts/VisueltPro-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/VisueltPro-BoldItalic.ttf
+          weight: 600
+        - asset: assets/fonts/VisueltPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/VisueltPro-MediumItalic.ttf
+          weight: 500
+        - asset: assets/fonts/VisueltPro-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/VisueltPro-Italic.ttf
+          weight: 400
+        - asset: assets/fonts/VisueltPro-Light.ttf
+          weight: 300
+        - asset: assets/fonts/VisueltPro-LightItalic.ttf
+          weight: 300
+        - asset: assets/fonts/VisueltPro-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/VisueltPro-ExtraLightItalic.ttf
+          weight: 200
+        - asset: assets/fonts/VisueltPro-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/VisueltPro-ThinItalic.ttf
+          weight: 100
 
   #
   # For details regarding fonts from package dependencies,

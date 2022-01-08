@@ -1,0 +1,44 @@
+{
+  "name" : "GOLDEN_DREAM",
+  "title" : "Golden dream",
+  "imageUrl": "https://www.thecocktaildb.com/images/media/drink/qrot6j1504369425.jpg",
+  "ingredients": [
+    {
+      "name": "TEQUILA",
+      "title": "Tequila",
+      "category": {
+        "title": "SPIRITS",
+        "name": "Spirits"
+      },
+      "measurement": "oz",
+      "quantity": 1.5
+    }
+  ],
+  "optionalIngredients": [],
+  "description": "",
+  "recipe" : "Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the outer rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass.",
+  "glasses": [
+    {
+      "name": "COCKTAIL_GLASS",
+      "title": "Cocktail glass"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ContemporaryClassic",
+      "title": "Contemporary Classics"
+    },
+    {
+      "name": "IBA",
+      "title": "IBA"
+    }
+  ],
+  "alcoholDegree": 10,
+  "alcoholCocktailType": "ALCOHOLIC",
+  "categories": [
+    {
+      "name": "ORDINARY",
+      "title": "Ordinary drink"
+    }
+  ]
+}

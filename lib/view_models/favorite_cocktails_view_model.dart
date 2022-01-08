@@ -1,44 +1,18 @@
-import 'package:flutter/foundation.dart';
-import 'package:molotov_bar/core/models/cocktail.dart';
+import 'package:get_it/get_it.dart';
 import 'package:molotov_bar/core/models/cocktail_error.dart';
-import 'package:molotov_bar/core/repositories/favorite_cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/local/local_favorite_cocktail_repository.dart';
+import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
+import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 
-class FavoriteCocktailsViewModel extends ChangeNotifier {
-  bool _loading = false;
-  List<Cocktail> _cocktailsFavoriteList = [];
-  CocktailError? _cocktailError;
-  final FavoriteCocktailRepository _favoriteCocktailRepository =
-      LocalFavoriteCocktailRepository(); //todo put somewhere in DI
+class FavoriteCocktailsViewModel extends CocktailsViewModel {
+  final CocktailRepository _cocktailRepository =
+      GetIt.instance<CocktailRepository>();
 
-  bool get loading => _loading;
-
-  List<Cocktail> get cocktailsFavoriteList => _cocktailsFavoriteList;
-
-  CocktailError? get cocktailError => _cocktailError;
-
-  FavoriteCocktailsViewModel() {
-    initCocktailsList();
-  }
-
-  setLoading(bool loading) async {
-    _loading = loading;
-    notifyListeners();
-  }
-
-  setCocktailsFavoriteList(List<Cocktail> cocktailsList) {
-    _cocktailsFavoriteList = cocktailsList;
-  }
-
-  setCocktailError(CocktailError cocktailError) {
-    _cocktailError = cocktailError;
-  }
-
+  @override
   initCocktailsList() async {
     setLoading(true);
-    var response = await _favoriteCocktailRepository.getFavorites();
+    var response = await _cocktailRepository.getFavorites();
     try {
-      setCocktailsFavoriteList(response);
+      setCocktailsList(response);
     } on Exception {
       var error = CocktailError(
         code: 111,

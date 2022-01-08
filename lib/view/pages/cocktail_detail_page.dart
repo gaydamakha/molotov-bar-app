@@ -141,7 +141,11 @@ class CocktailDetailPage extends StatelessWidget {
                   Text("Recipe", style: Theme.of(context).textTheme.headline4),
                   ListTile(
                     title: Text(cocktail.recipe,
-                        style: const TextStyle(fontSize: 16, height: 1.2)),
+                        textAlign: TextAlign.justify,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          height: 1.2,
+                        )),
                   )
                 ],
               ),

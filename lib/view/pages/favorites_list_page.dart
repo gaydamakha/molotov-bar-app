@@ -36,6 +36,6 @@ class _FavoritesListPageState extends State<FavoritesListPage> {
     if (favoriteCocktailsViewModel.cocktailError != null) {
       return Text(favoriteCocktailsViewModel.cocktailError!.message);
     }
-    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.cocktailsFavoriteList);
+    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.cocktailsList);
   }
 }
