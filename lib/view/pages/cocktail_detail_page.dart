@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:molotov_bar/view_models/cocktails_view_model.dart';
+import 'package:provider/provider.dart';
 
 class CocktailDetailPage extends StatelessWidget {
   final Cocktail cocktail;
@@ -14,6 +16,7 @@ class CocktailDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CocktailsViewModel cocktailsViewModel = context.watch<CocktailsViewModel>();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton: Padding(
@@ -37,10 +40,14 @@ class CocktailDetailPage extends StatelessWidget {
               backgroundColor:
                   Theme.of(context).backgroundColor.withOpacity(0.6),
               onPressed: () {
-                /* Do something */
+                if (cocktail.favorite) {
+                  cocktailsViewModel.unsetCocktailFavorite(cocktail);
+                } else {
+                  cocktailsViewModel.setCocktailFavorite(cocktail);
+                }
               },
               child: Icon(
-                Icons.favorite_border,
+                cocktail.favorite ? Icons.favorite : Icons.favorite_border,
                 color: Theme.of(context).primaryColor,
                 size: 25,
               ),

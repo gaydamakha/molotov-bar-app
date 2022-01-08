@@ -1,36 +1,24 @@
 import 'dart:convert';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:molotov_bar/core/repositories/local/base_local_repository.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 
-class LocalCocktailRepository implements CocktailRepository
-{
-  @override
-  Future<List<Cocktail>> getFavorites() async{
-    var file = await rootBundle.loadString('assets/samples/margarita.json');
-    final jsonResponse = json.decode(file);
+class LocalCocktailRepository extends BaseLocalRepository
+    implements CocktailRepository {
+  final String table = 'favorite_cocktails';
 
-    List<Cocktail> cocktails = [
-      Cocktail.fromJson(jsonResponse),
-    ];
-
-    return Future<List<Cocktail>>(() {
-      return cocktails;
-    });
-  }
+  LocalCocktailRepository(Database connection) : super(connection);
 
   @override
-  Future<List<Cocktail>> getAll() async {
-    var file = await rootBundle.loadString('assets/samples/margarita.json');
-    final jsonResponse = json.decode(file);
-
-    List<Cocktail> cocktails = [
-      Cocktail.fromJson(jsonResponse),
-    ];
-
-    return Future<List<Cocktail>>(() {
-      return cocktails;
-    });
+  Future<List<Cocktail>> getFavorites() async {
+    var result = await connection.query(table, columns: ['cocktail']);
+    return List.generate(result.length,
+        (i) {
+          var cocktail = Cocktail.fromJson(jsonDecode(result[i]['cocktail'] as String));
+          cocktail.favorite = true;
+          return cocktail;
+        });
   }
 
   void save(List<Cocktail> cocktails) {
@@ -39,18 +27,28 @@ class LocalCocktailRepository implements CocktailRepository
 
   @override
   Cocktail setFavorite(Cocktail cocktail) {
-    // TODO: implement setFavorite
-    throw UnimplementedError();
+    cocktail.favorite = true;
+    connection.insert(table, <String, Object?>{
+      'name': cocktail.name,
+      'cocktail': jsonEncode(cocktail.toJson()),
+    });
+    return cocktail;
   }
 
   @override
   Cocktail unsetFavorite(Cocktail cocktail) {
-    // TODO: implement unsetFavorite
-    throw UnimplementedError();
+    cocktail.favorite = false;
+    connection.delete(table, where: 'name = ?', whereArgs: [cocktail.name]);
+    return cocktail;
   }
 
   @override
   Future<List<Cocktail>> search(String value) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Cocktail>> getAll() async {
     throw UnimplementedError();
   }
 }

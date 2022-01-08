@@ -11,16 +11,8 @@ class Cocktail {
   final List<String> categories;
   bool favorite;
 
-  Cocktail(
-      this.name,
-      this.title,
-      this.imageUrl,
-      this.description,
-      this.recipe,
-      this.alcoholDegree,
-      this.ingredients,
-      this.categories,
-      this.favorite);
+  Cocktail(this.name, this.title, this.imageUrl, this.description, this.recipe,
+      this.alcoholDegree, this.ingredients, this.categories, this.favorite);
 
   factory Cocktail.fromJson(Map<String, dynamic> json,
       {bool favorite = false}) {
@@ -42,5 +34,19 @@ class Cocktail {
         ingredients,
         categories,
         favorite);
+  }
+
+  Map<String, dynamic> toJson() {
+    var json = {
+      'name': name,
+      'title': title,
+      'imageUrl': imageUrl,
+      'description': description,
+      'recipe': recipe,
+      'alcoholDegree': alcoholDegree,
+      'ingredients': ingredients.map((e) => e.toJson()).toList(),
+      'categories': categories.map((e) => {'title': e}).toList(),
+    };
+    return json;
   }
 }

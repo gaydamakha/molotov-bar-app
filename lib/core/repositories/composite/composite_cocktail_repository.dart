@@ -15,11 +15,12 @@ class CompositeCocktailRepository implements CocktailRepository {
   Future<List<Cocktail>> getAll() async {
     var cocktails = await httpCocktailRepository.getAll();
     var favoriteCocktails = await localCocktailRepository.getFavorites();
-    cocktails.map((c1) {
+    cocktails = cocktails.map((c1) {
       if (favoriteCocktails.firstWhereOrNull((c2) => c1.name == c2.name) != null) {
         c1.favorite = true;
       }
-    });
+      return c1;
+    }).toList();
     // localCocktailRepository.save(cocktails);
     return cocktails;
   }

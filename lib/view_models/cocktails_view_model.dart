@@ -6,12 +6,12 @@ import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 
 class CocktailsViewModel extends ChangeNotifier {
   bool _loading = false;
-  List<Cocktail> _cocktailsList = [];
+  static Map<String, Cocktail> _cocktails = {};
   CocktailError? _cocktailError;
 
   bool get loading => _loading;
 
-  List<Cocktail> get cocktailsList => _cocktailsList;
+  Map<String, Cocktail> getCocktails() => _cocktails;
 
   CocktailError? get cocktailError => _cocktailError;
 
@@ -27,8 +27,8 @@ class CocktailsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  setCocktailsList(List<Cocktail> cocktailsList) {
-    _cocktailsList = cocktailsList;
+  setCocktails(List<Cocktail> cocktailsList) {
+    _cocktails = { for (var c in cocktailsList) c.name : c };
   }
 
   setCocktailError(CocktailError cocktailError) {
@@ -41,7 +41,7 @@ class CocktailsViewModel extends ChangeNotifier {
     setLoading(true);
     var response = await _cocktailRepository.search(value);
     try {
-      setCocktailsList(response);
+      setCocktails(response);
     } on Exception {
       var error = CocktailError(
         code: 111,
@@ -52,16 +52,21 @@ class CocktailsViewModel extends ChangeNotifier {
     setLoading(false);
   }
 
-  // void setSelectedCocktail(Cocktail? cocktail) {
-  //   _cocktail = cocktail;
-  //   notifyListeners();
-  // }
+  void setCocktailFavorite(Cocktail cocktail) {
+    _cocktails[cocktail.name] = _cocktailRepository.setFavorite(cocktail);
+    notifyListeners();
+  }
+
+  void unsetCocktailFavorite(Cocktail cocktail) {
+    _cocktails[cocktail.name] = _cocktailRepository.unsetFavorite(cocktail);
+    notifyListeners();
+  }
 
   initCocktailsList() async {
     setLoading(true);
     var response = await _cocktailRepository.getAll();
     try {
-      setCocktailsList(response);
+      setCocktails(response);
     } on Exception {
       var error = CocktailError(
         code: 111,
