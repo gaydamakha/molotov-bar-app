@@ -6,12 +6,12 @@ import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 
 class CocktailsViewModel extends ChangeNotifier {
   bool _loading = false;
-  static Map<String, Cocktail> _cocktails = {};
+  Map<String, Cocktail> _cocktails = {};
   CocktailError? _cocktailError;
 
   bool get loading => _loading;
 
-  Map<String, Cocktail> getCocktails() => _cocktails;
+  List<Cocktail> getCocktails() => _cocktails.values.toList();
 
   CocktailError? get cocktailError => _cocktailError;
 
@@ -64,8 +64,8 @@ class CocktailsViewModel extends ChangeNotifier {
 
   initCocktailsList() async {
     setLoading(true);
-    var response = await _cocktailRepository.getAll();
     try {
+      var response = await _cocktailRepository.getAll(); //todo return a subset (p.e. popular cocktails)
       setCocktails(response);
     } on Exception {
       var error = CocktailError(

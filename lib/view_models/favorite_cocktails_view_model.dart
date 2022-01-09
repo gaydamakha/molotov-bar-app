@@ -1,22 +1,43 @@
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/models/cocktail_error.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
-import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 
-class FavoriteCocktailsViewModel extends CocktailsViewModel {
+class FavoriteCocktailsViewModel extends ChangeNotifier {
+  bool _loading = false;
+  Map<String, Cocktail> _cocktails = {};
+  CocktailError? _cocktailError;
+
+  bool get loading => _loading;
+
+  List<Cocktail> getCocktails() {
+    return _cocktails.values.toList();
+  }
+
+  CocktailError? get cocktailError => _cocktailError;
+
   final CocktailRepository _cocktailRepository =
       GetIt.instance<CocktailRepository>();
 
-  @override
-  Map<String, Cocktail> getCocktails() {
-    var filtered = Map.of(super.getCocktails())
-      ..removeWhere((key, value) => !value.favorite);
-    return filtered;
+  FavoriteCocktailsViewModel() {
+    initCocktailsList();
   }
 
-  @override
-  initCocktailsList() async {
+  setLoading(bool loading) async {
+    _loading = loading;
+    notifyListeners();
+  }
+
+  setCocktails(List<Cocktail> cocktailsList) {
+    _cocktails = {for (var c in cocktailsList) c.name: c};
+  }
+
+  setCocktailError(CocktailError cocktailError) {
+    _cocktailError = cocktailError;
+  }
+
+  refresh() async {
     setLoading(true);
     var response = await _cocktailRepository.getFavorites();
     try {
@@ -29,5 +50,9 @@ class FavoriteCocktailsViewModel extends CocktailsViewModel {
       setCocktailError(error);
     }
     setLoading(false);
+  }
+
+  initCocktailsList() async {
+    refresh();
   }
 }

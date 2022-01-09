@@ -4,6 +4,7 @@ import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
+import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CocktailDetailPage extends StatelessWidget {
@@ -17,6 +18,7 @@ class CocktailDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CocktailsViewModel cocktailsViewModel = context.watch<CocktailsViewModel>();
+    FavoriteCocktailsViewModel favoriteCocktailsViewModel = context.read<FavoriteCocktailsViewModel>();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton: Padding(
@@ -45,6 +47,7 @@ class CocktailDetailPage extends StatelessWidget {
                 } else {
                   cocktailsViewModel.setCocktailFavorite(cocktail);
                 }
+                favoriteCocktailsViewModel.refresh();
               },
               child: Icon(
                 cocktail.favorite ? Icons.favorite : Icons.favorite_border,

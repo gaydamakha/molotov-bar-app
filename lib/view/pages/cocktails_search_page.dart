@@ -42,6 +42,6 @@ class _CocktailsSearchPageState extends State<CocktailsSearchPage> {
     if (cocktailsViewModel.cocktailError != null) {
       return Text(cocktailsViewModel.cocktailError!.message);
     }
-    return CocktailsList(cocktailsList: cocktailsViewModel.getCocktails().values.toList());
+    return CocktailsList(cocktailsList: cocktailsViewModel.getCocktails());
   }
 }

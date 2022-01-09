@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:molotov_bar/view/widgets/cocktails_list.dart';
-import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,6 @@ class FavoritesListPage extends StatefulWidget {
 class _FavoritesListPageState extends State<FavoritesListPage> {
   @override
   Widget build(BuildContext context) {
-    context.watch<CocktailsViewModel>();
     FavoriteCocktailsViewModel favoriteCocktailsViewModel = context.watch<FavoriteCocktailsViewModel>();
     return Scaffold(
         body: SafeArea(
@@ -38,6 +36,6 @@ class _FavoritesListPageState extends State<FavoritesListPage> {
     if (favoriteCocktailsViewModel.cocktailError != null) {
       return Text(favoriteCocktailsViewModel.cocktailError!.message);
     }
-    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.getCocktails().values.toList());
+    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.getCocktails());
   }
 }
