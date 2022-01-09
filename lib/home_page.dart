@@ -17,32 +17,39 @@ class HomePage extends StatelessWidget {
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return Container(
-          color: AppColors.darkGray,
+            color: AppColors.darkGray,
             child: SalomonBottomBar(
-          selectedItemColor: Theme.of(context).colorScheme.secondary,
-          margin: const EdgeInsets.symmetric(
-            horizontal: 40,
-            vertical: 10,
-          ),
-          currentIndex: tabsRouter.activeIndex,
-          onTap: tabsRouter.setActiveIndex,
-          items: [
-            SalomonBottomBarItem(
-              icon: const Icon(
-                FontAwesomeIcons.cocktail,
-                size: 25,
+              selectedItemColor: Theme.of(context).colorScheme.secondary,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 40,
+                vertical: 10,
               ),
-              title: const Text('Cocktails'),
-            ),
-            SalomonBottomBarItem(
-              icon: const Icon(
-                Icons.favorite,
-                size: 25,
-              ),
-              title: const Text('Favorites'),
-            )
-          ],
-        ));
+              currentIndex: tabsRouter.activeIndex,
+              onTap: (i) {
+                while (tabsRouter.canNavigateBack) {
+                  tabsRouter.navigateBack();
+                }
+                tabsRouter.setActiveIndex(i);
+                tabsRouter.navigateNamed(
+                    tabsRouter.routeCollection.routes.elementAt(i).path);
+              },
+              items: [
+                SalomonBottomBarItem(
+                  icon: const Icon(
+                    FontAwesomeIcons.cocktail,
+                    size: 25,
+                  ),
+                  title: const Text('Cocktails'),
+                ),
+                SalomonBottomBarItem(
+                  icon: const Icon(
+                    Icons.favorite,
+                    size: 25,
+                  ),
+                  title: const Text('Favorites'),
+                )
+              ],
+            ));
       },
     );
   }

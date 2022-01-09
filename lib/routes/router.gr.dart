@@ -64,7 +64,7 @@ class AppRouter extends _i2.RootStackRouter {
                 _i2.RouteConfig(CocktailsSearchRoute.name,
                     path: '', parent: CocktailsRouter.name),
                 _i2.RouteConfig(CocktailDetailRoute.name,
-                    path: 'cocktail-detail-page', parent: CocktailsRouter.name)
+                    path: 'detail', parent: CocktailsRouter.name)
               ]),
           _i2.RouteConfig(FavoritesRouter.name,
               path: 'favorites',
@@ -73,7 +73,7 @@ class AppRouter extends _i2.RootStackRouter {
                 _i2.RouteConfig(FavoritesListRoute.name,
                     path: '', parent: FavoritesRouter.name),
                 _i2.RouteConfig(CocktailDetailRoute.name,
-                    path: 'cocktail-detail-page', parent: FavoritesRouter.name)
+                    path: 'detail', parent: FavoritesRouter.name)
               ])
         ])
       ];
@@ -121,7 +121,7 @@ class CocktailsSearchRoute extends _i2.PageRouteInfo<void> {
 class CocktailDetailRoute extends _i2.PageRouteInfo<CocktailDetailRouteArgs> {
   CocktailDetailRoute({_i6.Key? key, required _i7.Cocktail cocktail})
       : super(CocktailDetailRoute.name,
-            path: 'cocktail-detail-page',
+            path: 'detail',
             args: CocktailDetailRouteArgs(key: key, cocktail: cocktail));
 
   static const String name = 'CocktailDetailRoute';
