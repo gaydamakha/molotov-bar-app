@@ -1,14 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:molotov_bar/theme/app_colors.dart';
+import 'package:molotov_bar/view/widgets/drop_down.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function(dynamic) onSubmitted;
 
-  const SearchBar({Key? key, required this.onSubmitted}) : super(key: key);
+  SearchBar({Key? key, required this.onSubmitted}) : super(key: key);
+
+  final List<SelectedListItem> listOfIngredients = [
+    SelectedListItem(false, "Vodka")
+  ];
 
   @override
   Widget build(BuildContext context) {
+
+
+    var filterController = TextEditingController();
     final _inputController = TextEditingController();
+
+    void onTextFieldTap() {
+      DropDownState(
+        DropDown(
+          searchHintText: "search..",
+          bottomSheetTitle: "filters",
+          searchBackgroundColor: Colors.black12,
+
+          dataList: listOfIngredients,
+          selectedItem: (String selected) {
+            filterController.text = selected;
+          },
+          enableMultipleSelection: false,
+          searchController: filterController,
+        ),
+      ).showModal(context);
+    }
+
 
     return Container(
         decoration: BoxDecoration(
@@ -23,12 +49,15 @@ class SearchBar extends StatelessWidget {
             controller: _inputController,
             onChanged: (value) {},
             onSubmitted: (value) => onSubmitted(value),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
-              prefixIcon: Icon(Icons.search),
-              suffixIcon: Icon(Icons.tune),
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: GestureDetector(
+                onTap: onTextFieldTap,
+                child: const Icon(Icons.tune),
+              ),
             )));
   }
 }
