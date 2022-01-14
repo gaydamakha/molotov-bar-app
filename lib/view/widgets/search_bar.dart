@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:molotov_bar/theme/app_colors.dart';
 import 'package:molotov_bar/view/widgets/drop_down.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function(dynamic) onSubmitted;
 
-  SearchBar({Key? key, required this.onSubmitted}) : super(key: key);
-
-  final List<SelectedListItem> listOfIngredients = [
-    SelectedListItem(false, "Vodka")
-  ];
+  const SearchBar({Key? key, required this.onSubmitted}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
+    List<SelectedListItem> listOfIngredients = [
+      SelectedListItem(false, "Vodka"),
+      SelectedListItem(false, "Tequila")
+    ];
 
     var filterController = TextEditingController();
     final _inputController = TextEditingController();
@@ -21,25 +19,19 @@ class SearchBar extends StatelessWidget {
     void onTextFieldTap() {
       DropDownState(
         DropDown(
-          searchHintText: "search..",
-          bottomSheetTitle: "filters",
-          searchBackgroundColor: Colors.black12,
-
+          bottomSheetTitle: "Ingredients",
+          searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
           dataList: listOfIngredients,
-          selectedItem: (String selected) {
-            filterController.text = selected;
-          },
           enableMultipleSelection: false,
           searchController: filterController,
         ),
       ).showModal(context);
     }
 
-
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(13.0),
-          color: AppColors.gray,
+          color: Theme.of(context).colorScheme.primaryVariant,
         ),
         child: TextField(
             style: const TextStyle(
@@ -50,14 +42,13 @@ class SearchBar extends StatelessWidget {
             onChanged: (value) {},
             onSubmitted: (value) => onSubmitted(value),
             decoration: InputDecoration(
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: GestureDetector(
-                onTap: onTextFieldTap,
-                child: const Icon(Icons.tune),
-              ),
-            )));
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.tune),
+                  onPressed: onTextFieldTap,
+                ))));
   }
 }

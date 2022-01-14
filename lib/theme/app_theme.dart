@@ -8,6 +8,7 @@ class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.lightGray,
         secondary: AppColors.yellow,
+        primaryVariant: AppColors.gray
       ),
       brightness: Brightness.dark,
       primaryColor: AppColors.lightGray,
@@ -17,6 +18,8 @@ class AppTheme {
     return theme.copyWith(
       textTheme: theme.textTheme
           .apply(displayColor: AppColors.lightGray, fontFamily: 'VisueltPro'),
+      bottomSheetTheme: theme.bottomSheetTheme
+        .copyWith(modalBackgroundColor: AppColors.dark)
     );
   }
 }

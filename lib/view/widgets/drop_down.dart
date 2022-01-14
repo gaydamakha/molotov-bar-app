@@ -59,7 +59,7 @@ class DropDownState {
     showModalBottomSheet(
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(13.0)),
       ),
       context: context,
       builder: (context) {
@@ -120,15 +120,14 @@ class _MainBodyState extends State<MainBody> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   /// Bottom sheet title text
-                  Text(
-                    widget.dropDown.bottomSheetTitle ?? 'Title',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20.0),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  ),
-
+                  widget.dropDown.bottomSheetTitle != null ?
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      widget.dropDown.bottomSheetTitle!,
+                      style: Theme.of(context).textTheme.headline5
+                    ),
+                  ): const SizedBox(),
                   /// Done button
                   Visibility(
                     visible: widget.dropDown.enableMultipleSelection,
@@ -187,6 +186,7 @@ class _MainBodyState extends State<MainBody> {
                         child: ListTile(
                           title: Text(
                             mainList[index].name,
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                           trailing: widget.dropDown.enableMultipleSelection
                               ? GestureDetector(
@@ -201,16 +201,22 @@ class _MainBodyState extends State<MainBody> {
                                 : const Icon(
                                 Icons.check_box_outline_blank),
                           )
-                              : const SizedBox(
-                            height: 0.0,
-                            width: 0.0,
-                          ),
+                              : mainList[index].isSelected ? Icon(
+                              Icons.check,
+                              color: Theme.of(context).colorScheme.secondary
+                          ) : null
                         ),
                       ),
                     ),
                     onTap: widget.dropDown.enableMultipleSelection
                         ? null
                         : () {
+                      setState(() {
+                        for (var item in mainList) {
+                          item.isSelected = false;
+                        }
+                        mainList[index].isSelected = !mainList[index].isSelected;
+                      });
                       widget.dropDown.selectedItem
                           ?.call(mainList[index].name);
                       _onUnfocusKeyboardAndPop();
@@ -274,38 +280,40 @@ class _AppTextFieldState extends State<_AppTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.only(
+        left: 10,
+        right: 10,
+        bottom: 10,
+        top: 2
+      ),
       child: TextFormField(
         controller: widget.dropDown.searchController,
-        cursorColor: Colors.black,
         onChanged: (value) {
           widget.onTextChanged(value);
         },
+        textAlignVertical: TextAlignVertical.center,
+        style: const TextStyle(
+          fontSize: 20,
+        ),
         decoration: InputDecoration(
           filled: true,
           fillColor: widget.dropDown.searchBackgroundColor ?? Colors.black12,
           contentPadding:
           const EdgeInsets.only(left: 0, bottom: 0, top: 0, right: 15),
-          hintText: widget.dropDown.searchHintText ?? 'Search',
+          hintText: widget.dropDown.searchHintText,
           border: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 0,
               style: BorderStyle.none,
             ),
             borderRadius: BorderRadius.all(
-              Radius.circular(8.0),
+              Radius.circular(13.0),
             ),
           ),
-          prefixIcon: const IconButton(
-            icon: Icon(Icons.search),
-            onPressed: null,
-          ),
+          prefixIcon: const Icon(Icons.search),
           suffixIcon: GestureDetector(
             onTap: widget.onClearTap,
-            child: const Icon(
-              Icons.cancel,
-              color: Colors.grey,
-            ),
+            child: const Icon(Icons.cancel),
           ),
         ),
       ),
