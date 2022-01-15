@@ -1,4 +1,4 @@
-import 'package:molotov_bar/core/models/ingredient.dart';
+import 'package:molotov_bar/core/models/cocktail_ingredient.dart';
 
 class Cocktail {
   final String name;
@@ -6,19 +6,49 @@ class Cocktail {
   final String imageUrl;
   final String description;
   final String recipe;
-  final double alcoholDegree;
-  final List<Ingredient> ingredients;
+  final double? alcoholDegree;
+  final List<CocktailIngredient> ingredients;
   final List<String> categories;
   bool favorite;
 
   Cocktail(this.name, this.title, this.imageUrl, this.description, this.recipe,
       this.alcoholDegree, this.ingredients, this.categories, this.favorite);
 
+  factory Cocktail.fromCocktailDbJson(Map<String, dynamic> json,
+      {bool favorite = false}) {
+    List<CocktailIngredient> ingredients = json.keys
+        .where((key) => key.startsWith('strIngredient'))
+        .map((key) {
+          if (json[key] == null) {
+            return null;
+          }
+          String index = key[key.length - 1];
+          return CocktailIngredient('', json[key],
+              json['strMeasure' + index]?.toString().trim(), null);
+        })
+        .whereType<CocktailIngredient>()
+        .toList();
+
+    List<String> categories = [json['strCategory'].toString()];
+
+    return Cocktail(
+        json['idDrink'].toString(),
+        json['strDrink'].toString(),
+        json['strDrinkThumb'].toString(),
+        '',
+        json['strInstructions'].toString(),
+        null,
+        ingredients,
+        categories,
+        favorite);
+  }
+
   factory Cocktail.fromJson(Map<String, dynamic> json,
       {bool favorite = false}) {
     var ingredientsJson = json['ingredients'] as List;
-    List<Ingredient> ingredients =
-        ingredientsJson.map((json) => Ingredient.fromJson(json)).toList();
+    List<CocktailIngredient> ingredients = ingredientsJson
+        .map((json) => CocktailIngredient.fromJson(json))
+        .toList();
 
     var categoriesJson = json['categories'] as List;
     List<String> categories =
@@ -30,7 +60,7 @@ class Cocktail {
         json['imageUrl'].toString(),
         json['description'].toString(),
         json['recipe'].toString(),
-        json['alcoholDegree'].toDouble(),
+        json['alcoholDegree']?.toDouble(),
         ingredients,
         categories,
         favorite);

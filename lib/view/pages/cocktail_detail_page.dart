@@ -18,7 +18,8 @@ class CocktailDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CocktailsViewModel cocktailsViewModel = context.watch<CocktailsViewModel>();
-    FavoriteCocktailsViewModel favoriteCocktailsViewModel = context.read<FavoriteCocktailsViewModel>();
+    FavoriteCocktailsViewModel favoriteCocktailsViewModel =
+        context.read<FavoriteCocktailsViewModel>();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton: Padding(
@@ -75,14 +76,17 @@ class CocktailDetailPage extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ),
-                      ListTile(
-                        leading: SvgPicture.asset(AppIcons.drop, height: 20),
-                        title: Text(
-                          cocktail.alcoholDegree.toString() + " %",
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        minLeadingWidth: 0,
-                      ),
+                      cocktail.alcoholDegree == null
+                          ? const SizedBox()
+                          : ListTile(
+                              leading:
+                                  SvgPicture.asset(AppIcons.drop, height: 20),
+                              title: Text(
+                                cocktail.alcoholDegree.toString() + " %",
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                              minLeadingWidth: 0,
+                            ),
                       ListTile(
                         leading: SvgPicture.asset(AppIcons.list, height: 20),
                         title: Text(

@@ -1,56 +1,43 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:molotov_bar/core/models/cocktail.dart';
+import 'package:molotov_bar/core/models/cocktail_error.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/base_http_repository.dart';
 
 class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepository {
   @override
   Future<List<Cocktail>> getAll() async {
-    //TODO call http
-    var file = await rootBundle.loadString('assets/samples/margarita.json');
-    final jsonResponse = json.decode(file);
+    var response = await get('/search.php', {'s': ''});
+    if (response.statusCode != 200) {
+      throw CocktailError(
+          code: 1, message: 'Failed to fetch cocktails (c\'est de la merde)');
+    }
+    var drinks = json.decode(response.body)['drinks'];
+    if (drinks == null) {
+      return [];
+    }
 
-    var file2 = await rootBundle.loadString('assets/samples/old_pal.json');
-    final jsonResponse2 = json.decode(file2);
-
-    var file3 = await rootBundle.loadString('assets/samples/golden_dream.json');
-    final jsonResponse3 = json.decode(file3);
-
-    List<Cocktail> cocktails = [
-      Cocktail.fromJson(jsonResponse),
-      Cocktail.fromJson(jsonResponse2),
-      Cocktail.fromJson(jsonResponse3),
-    ];
-
-    return Future<List<Cocktail>>(() {
-      return cocktails;
-    });
+    return (drinks as List<dynamic>)
+        .map((e) => Cocktail.fromCocktailDbJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override
   Future<List<Cocktail>> search(String value) async {
-    //TODO call http
+    var response = await get('/search.php', {'s': value.trim()});
+    if (response.statusCode != 200) {
+      throw CocktailError(
+          code: 1, message: 'Failed to fetch cocktails (c\'est de la merde)');
+    }
+    var drinks = json.decode(response.body)['drinks'];
+    if (drinks == null) {
+      return [];
+    }
 
-    var file = await rootBundle.loadString('assets/samples/margarita.json');
-    final jsonResponse = json.decode(file);
-
-    var file2 = await rootBundle.loadString('assets/samples/old_pal.json');
-    final jsonResponse2 = json.decode(file2);
-
-    var file3 = await rootBundle.loadString('assets/samples/golden_dream.json');
-    final jsonResponse3 = json.decode(file3);
-
-    List<Cocktail> cocktails = [
-      Cocktail.fromJson(jsonResponse),
-      Cocktail.fromJson(jsonResponse2),
-      Cocktail.fromJson(jsonResponse3),
-    ];
-
-    return Future<List<Cocktail>>(() {
-      return cocktails;
-    });
+    return (drinks as List<dynamic>)
+        .map((e) => Cocktail.fromCocktailDbJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override

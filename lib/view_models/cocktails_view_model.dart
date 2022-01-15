@@ -42,12 +42,8 @@ class CocktailsViewModel extends ChangeNotifier {
     var response = await _cocktailRepository.search(value);
     try {
       setCocktails(response);
-    } on Exception {
-      var error = CocktailError(
-        code: 111,
-        message: 'error',
-      );
-      setCocktailError(error);
+    } on CocktailError catch (e) {
+      setCocktailError(e);
     }
     setLoading(false);
   }
@@ -67,12 +63,8 @@ class CocktailsViewModel extends ChangeNotifier {
     try {
       var response = await _cocktailRepository.getAll(); //todo return a subset (p.e. popular cocktails)
       setCocktails(response);
-    } on Exception {
-      var error = CocktailError(
-        code: 111,
-        message: 'error',
-      );
-      setCocktailError(error);
+    } on CocktailError catch (e) {
+      setCocktailError(e);
     }
     setLoading(false);
   }
