@@ -4,15 +4,13 @@ import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/local/base_local_repository.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 
-class LocalCocktailRepository extends BaseLocalRepository
-    implements CocktailRepository {
+class LocalCocktailRepository extends BaseLocalRepository implements CocktailRepository {
   final String table = 'favorite_cocktails';
-
-  LocalCocktailRepository(Database connection) : super(connection);
 
   @override
   Future<List<Cocktail>> getFavorites() async {
-    var result = await connection.query(table, columns: ['cocktail']);
+    var conn = await connection;
+    var result = await conn.query(table, columns: ['cocktail']);
     return List.generate(result.length,
         (i) {
           var cocktail = Cocktail.fromJson(jsonDecode(result[i]['cocktail'] as String));
@@ -26,9 +24,10 @@ class LocalCocktailRepository extends BaseLocalRepository
   }
 
   @override
-  Cocktail setFavorite(Cocktail cocktail) {
+  Future<Cocktail> setFavorite(Cocktail cocktail) async {
     cocktail.favorite = true;
-    connection.insert(table, <String, Object?>{
+    var conn = await connection;
+    conn.insert(table, <String, Object?>{
       'name': cocktail.name,
       'cocktail': jsonEncode(cocktail.toJson()),
     });
@@ -36,9 +35,10 @@ class LocalCocktailRepository extends BaseLocalRepository
   }
 
   @override
-  Cocktail unsetFavorite(Cocktail cocktail) {
+  Future<Cocktail> unsetFavorite(Cocktail cocktail) async {
     cocktail.favorite = false;
-    connection.delete(table, where: 'name = ?', whereArgs: [cocktail.name]);
+    var conn = await connection;
+    conn.delete(table, where: 'name = ?', whereArgs: [cocktail.name]);
     return cocktail;
   }
 

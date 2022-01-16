@@ -1,41 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:molotov_bar/view/widgets/cocktails_list.dart';
-import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:molotov_bar/view_models/cocktails_view_model.dart';
+import 'package:molotov_bar/providers/providers.dart';
 
-class FavoritesListPage extends StatefulWidget {
+class FavoritesListPage extends ConsumerStatefulWidget {
   const FavoritesListPage({Key? key}) : super(key: key);
 
   @override
-  State<FavoritesListPage> createState() => _FavoritesListPageState();
+  ConsumerState<FavoritesListPage> createState() => _FavoritesListPageState();
 }
 
-class _FavoritesListPageState extends State<FavoritesListPage> {
+class _FavoritesListPageState extends ConsumerState<FavoritesListPage> {
   @override
   Widget build(BuildContext context) {
-    FavoriteCocktailsViewModel favoriteCocktailsViewModel = context.watch<FavoriteCocktailsViewModel>();
+    final CocktailsViewModel cocktailsViewModel =
+        ref.watch<CocktailsViewModel>(cocktailsViewModelProvider.notifier);
     return Scaffold(
         body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                right: 10,
-                left: 10,
-              ),
-              child: Column(children: <Widget>[
-                const SizedBox(height: 10),
-                Flexible(child: _ui(favoriteCocktailsViewModel)),
-              ]),
-            )));
+      padding: const EdgeInsets.only(
+        top: 10,
+        right: 10,
+        left: 10,
+      ),
+      child: Column(children: <Widget>[
+        const SizedBox(height: 10),
+        Flexible(child: _ui(cocktailsViewModel)),
+      ]),
+    )));
   }
 
-  Widget _ui(FavoriteCocktailsViewModel favoriteCocktailsViewModel) {
-    if (favoriteCocktailsViewModel.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (favoriteCocktailsViewModel.cocktailError != null) {
-      return Text(favoriteCocktailsViewModel.cocktailError!.message);
-    }
-    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.getCocktails());
+  Widget _ui(CocktailsViewModel cocktailsViewModel) {
+    return CocktailsList(cocktailsList: cocktailsViewModel.getFavorites());
   }
 }

@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:molotov_bar/core/models/ingredient.dart';
+import 'package:molotov_bar/providers/providers.dart';
 import 'package:molotov_bar/view/widgets/cocktails_list.dart';
 import 'package:molotov_bar/view/widgets/search_bar.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
-import 'package:provider/provider.dart';
 
-class CocktailsSearchPage extends StatefulWidget {
+class CocktailsSearchPage extends StatefulHookConsumerWidget {
   const CocktailsSearchPage({Key? key}) : super(key: key);
 
   @override
-  State<CocktailsSearchPage> createState() => _CocktailsSearchPageState();
+  ConsumerState<CocktailsSearchPage> createState() => _CocktailsSearchPageState();
 }
 
-class _CocktailsSearchPageState extends State<CocktailsSearchPage> {
+class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
   @override
   Widget build(BuildContext context) {
-    CocktailsViewModel cocktailsViewModel = context.watch<CocktailsViewModel>();
+    final CocktailsViewModel cocktailsViewModel =
+        ref.watch(cocktailsViewModelProvider.notifier);
+    final AsyncValue<List<Ingredient>> ingredients =
+        ref.watch(ingredientsProvider);
+    final error = ref.watch(cocktailsViewModelProvider.notifier).getError();
+    final isLoading = ref.watch(cocktailsViewModelProvider.notifier).isLoading();
+    final cocktails = ref.watch(cocktailsViewModelProvider.notifier).getCocktails();
     return Scaffold(
         body: SafeArea(
             child: Padding(
@@ -24,24 +32,26 @@ class _CocktailsSearchPageState extends State<CocktailsSearchPage> {
         left: 10,
       ),
       child: Column(children: <Widget>[
-        SearchBar(onSubmitted: (value) {
-          if (value.isNotEmpty) {
-            cocktailsViewModel.searchCocktails(value);
-          }
-        }),
+        ingredients.when(
+          loading: () => const CircularProgressIndicator(),
+          error: (err, stack) => Text('Error: $err'),
+          data: (ingredientsList) {
+            return SearchBar(
+              onSubmitted: (value) {
+                if (value.isNotEmpty) {
+                  cocktailsViewModel.searchCocktails(value);
+                }
+              },
+              listOfFilters: ingredientsList.map((e) => e.title).toList(),
+            );
+          },
+        ),
         const SizedBox(height: 10),
-        Flexible(child: _ui(cocktailsViewModel)),
+        error != null ? Text(error.message) : const SizedBox(),
+        isLoading
+            ? const CircularProgressIndicator()
+            : Flexible(child: CocktailsList(cocktailsList: cocktails)),
       ]),
     )));
-  }
-
-  Widget _ui(CocktailsViewModel cocktailsViewModel) {
-    if (cocktailsViewModel.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (cocktailsViewModel.cocktailError != null) {
-      return Text(cocktailsViewModel.cocktailError!.message);
-    }
-    return CocktailsList(cocktailsList: cocktailsViewModel.getCocktails());
   }
 }

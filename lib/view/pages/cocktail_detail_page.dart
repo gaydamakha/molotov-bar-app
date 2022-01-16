@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
-import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:molotov_bar/providers/providers.dart';
 
-class CocktailDetailPage extends StatelessWidget {
+class CocktailDetailPage extends HookConsumerWidget {
   final Cocktail cocktail;
 
   const CocktailDetailPage({
@@ -16,10 +16,9 @@ class CocktailDetailPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    CocktailsViewModel cocktailsViewModel = context.watch<CocktailsViewModel>();
-    FavoriteCocktailsViewModel favoriteCocktailsViewModel =
-        context.read<FavoriteCocktailsViewModel>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final CocktailsViewModel cocktailsViewModel =
+        ref.watch<CocktailsViewModel>(cocktailsViewModelProvider.notifier);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton: Padding(
@@ -48,7 +47,6 @@ class CocktailDetailPage extends StatelessWidget {
                 } else {
                   cocktailsViewModel.setCocktailFavorite(cocktail);
                 }
-                favoriteCocktailsViewModel.refresh();
               },
               child: Icon(
                 cocktail.favorite ? Icons.favorite : Icons.favorite_border,

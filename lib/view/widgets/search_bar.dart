@@ -3,16 +3,18 @@ import 'package:molotov_bar/view/widgets/drop_down.dart';
 
 class SearchBar extends StatelessWidget {
   final void Function(dynamic) onSubmitted;
+  final String? filterDropdownTitle;
+  final List<String>? listOfFilters;
 
-  const SearchBar({Key? key, required this.onSubmitted}) : super(key: key);
+  const SearchBar(
+      {Key? key,
+      required this.onSubmitted,
+      this.filterDropdownTitle,
+      this.listOfFilters})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<SelectedListItem> listOfIngredients = [
-      SelectedListItem(false, "Vodka"),
-      SelectedListItem(false, "Tequila")
-    ];
-
     var filterController = TextEditingController();
     final _inputController = TextEditingController();
 
@@ -21,7 +23,7 @@ class SearchBar extends StatelessWidget {
         DropDown(
           bottomSheetTitle: "Ingredients",
           searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
-          dataList: listOfIngredients,
+          dataList: listOfFilters!.map((e) => SelectedListItem(false, e)).toList(),
           enableMultipleSelection: false,
           searchController: filterController,
         ),
@@ -46,7 +48,7 @@ class SearchBar extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
+                suffixIcon: listOfFilters == null ? null : IconButton(
                   icon: const Icon(Icons.tune),
                   onPressed: onTextFieldTap,
                 ))));
