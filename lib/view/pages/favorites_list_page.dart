@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/view/widgets/cocktails_list.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:molotov_bar/providers/providers.dart';
 
-class FavoritesListPage extends ConsumerStatefulWidget {
+class FavoritesListPage extends StatefulHookConsumerWidget {
   const FavoritesListPage({Key? key}) : super(key: key);
 
   @override
@@ -14,8 +14,8 @@ class FavoritesListPage extends ConsumerStatefulWidget {
 class _FavoritesListPageState extends ConsumerState<FavoritesListPage> {
   @override
   Widget build(BuildContext context) {
-    final CocktailsViewModel cocktailsViewModel =
-        ref.watch<CocktailsViewModel>(cocktailsViewModelProvider.notifier);
+    ref.watch(cocktailsViewModelProvider);
+    final CocktailsViewModel cocktailsViewModel = ref.watch(cocktailsViewModelProvider.notifier);
     return Scaffold(
         body: SafeArea(
             child: Padding(
@@ -26,12 +26,8 @@ class _FavoritesListPageState extends ConsumerState<FavoritesListPage> {
       ),
       child: Column(children: <Widget>[
         const SizedBox(height: 10),
-        Flexible(child: _ui(cocktailsViewModel)),
+        Flexible(child: CocktailsList(cocktailsList: cocktailsViewModel.getFavorites())),
       ]),
     )));
-  }
-
-  Widget _ui(CocktailsViewModel cocktailsViewModel) {
-    return CocktailsList(cocktailsList: cocktailsViewModel.getFavorites());
   }
 }

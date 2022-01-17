@@ -10,19 +10,19 @@ class CocktailsSearchPage extends StatefulHookConsumerWidget {
   const CocktailsSearchPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<CocktailsSearchPage> createState() => _CocktailsSearchPageState();
+  ConsumerState<CocktailsSearchPage> createState() =>
+      _CocktailsSearchPageState();
 }
 
 class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
   @override
   Widget build(BuildContext context) {
-    final CocktailsViewModel cocktailsViewModel =
-        ref.watch(cocktailsViewModelProvider.notifier);
-    final AsyncValue<List<Ingredient>> ingredients =
-        ref.watch(ingredientsProvider);
-    final error = ref.watch(cocktailsViewModelProvider.notifier).getError();
-    final isLoading = ref.watch(cocktailsViewModelProvider.notifier).isLoading();
-    final cocktails = ref.watch(cocktailsViewModelProvider.notifier).getCocktails();
+    ref.watch(cocktailsViewModelProvider);
+    final CocktailsViewModel cocktailsViewModel = ref.watch(cocktailsViewModelProvider.notifier);
+    final AsyncValue<List<Ingredient>> ingredients = ref.watch(ingredientsProvider);
+    final error = cocktailsViewModel.getError();
+    final isLoading = cocktailsViewModel.isLoading();
+    final cocktails = cocktailsViewModel.getCocktails();
     return Scaffold(
         body: SafeArea(
             child: Padding(
@@ -32,20 +32,19 @@ class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
         left: 10,
       ),
       child: Column(children: <Widget>[
-        ingredients.when(
-          loading: () => const CircularProgressIndicator(),
-          error: (err, stack) => Text('Error: $err'),
-          data: (ingredientsList) {
-            return SearchBar(
-              onSubmitted: (value) {
-                if (value.isNotEmpty) {
-                  cocktailsViewModel.searchCocktails(value);
-                }
-              },
-              listOfFilters: ingredientsList.map((e) => e.title).toList(),
-            );
-          },
-        ),
+        SearchBar(
+            onSubmitted: (value) {
+              if (value.isNotEmpty) {
+                ref
+                    .read(cocktailsViewModelProvider.notifier)
+                    .searchCocktails(value);
+              }
+            },
+            listOfFilters: ingredients.when(
+                data: (ingredientsList) =>
+                    ingredientsList.map((e) => e.title).toList(),
+                error: (err, stack) => [],
+                loading: () => [])),
         const SizedBox(height: 10),
         error != null ? Text(error.message) : const SizedBox(),
         isLoading

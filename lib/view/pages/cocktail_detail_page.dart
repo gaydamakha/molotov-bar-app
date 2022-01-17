@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:molotov_bar/providers/providers.dart';
 
 class CocktailDetailPage extends HookConsumerWidget {
@@ -17,8 +16,8 @@ class CocktailDetailPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final CocktailsViewModel cocktailsViewModel =
-        ref.watch<CocktailsViewModel>(cocktailsViewModelProvider.notifier);
+    ref.watch(cocktailsViewModelProvider);
+    ref.watch(cocktailsViewModelProvider.notifier);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton: Padding(
@@ -43,9 +42,9 @@ class CocktailDetailPage extends HookConsumerWidget {
                   Theme.of(context).backgroundColor.withOpacity(0.6),
               onPressed: () {
                 if (cocktail.favorite) {
-                  cocktailsViewModel.unsetCocktailFavorite(cocktail);
+                  ref.read(cocktailsViewModelProvider.notifier).unsetCocktailFavorite(cocktail);
                 } else {
-                  cocktailsViewModel.setCocktailFavorite(cocktail);
+                  ref.read(cocktailsViewModelProvider.notifier).setCocktailFavorite(cocktail);
                 }
               },
               child: Icon(

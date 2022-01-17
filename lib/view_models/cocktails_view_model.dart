@@ -32,12 +32,10 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
     state = state.copyWith(error: cocktailError);
   }
 
-  /// Call the cocktail repository and gets the data of requested cocktails f
-  /// an artist.
   Future<void> searchCocktails(String value) async {
     _setLoading(true);
     try {
-      final cocktails = await _cocktailRepository.getAll();
+      final cocktails = await _cocktailRepository.search(value);
       _setCocktails(cocktails);
     } on CocktailError catch (e) {
       _setError(e);
@@ -45,14 +43,16 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
     _setLoading(false);
   }
 
-  Future<void> setCocktailFavorite(Cocktail cocktail) async {
-    state.cocktails[cocktail.name] =
-        await _cocktailRepository.setFavorite(cocktail);
+  Future<Cocktail> setCocktailFavorite(Cocktail cocktail) async {
+    final ctl = await _cocktailRepository.setFavorite(cocktail);
+    state.cocktails[ctl.name] = ctl;
+    return ctl;
   }
 
-  Future<void> unsetCocktailFavorite(Cocktail cocktail) async {
-    state.cocktails[cocktail.name] =
-        await _cocktailRepository.unsetFavorite(cocktail);
+  Future<Cocktail> unsetCocktailFavorite(Cocktail cocktail) async {
+    final ctl = await _cocktailRepository.unsetFavorite(cocktail);
+    state.cocktails[ctl.name] = ctl;
+    return ctl;
   }
 
   Future<void> initCocktailsList() async {
