@@ -26,9 +26,9 @@ class LocalCocktailRepository extends BaseLocalRepository
   }
 
   @override
-  Cocktail setFavorite(Cocktail cocktail) {
+  Future<Cocktail> setFavorite(Cocktail cocktail) async {
     cocktail.favorite = true;
-    connection.insert(table, <String, Object?>{
+    await connection.insert(table, <String, Object?>{
       'name': cocktail.name,
       'cocktail': jsonEncode(cocktail.toJson()),
     });
@@ -36,9 +36,9 @@ class LocalCocktailRepository extends BaseLocalRepository
   }
 
   @override
-  Cocktail unsetFavorite(Cocktail cocktail) {
+  Future<Cocktail> unsetFavorite(Cocktail cocktail) async {
     cocktail.favorite = false;
-    connection.delete(table, where: 'name = ?', whereArgs: [cocktail.name]);
+    await connection.delete(table, where: 'name = ?', whereArgs: [cocktail.name]);
     return cocktail;
   }
 
@@ -47,8 +47,15 @@ class LocalCocktailRepository extends BaseLocalRepository
     throw UnimplementedError();
   }
 
+
+
   @override
   Future<List<Cocktail>> getAll() async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Cocktail>> filterByIngredient(String value) {
     throw UnimplementedError();
   }
 }
