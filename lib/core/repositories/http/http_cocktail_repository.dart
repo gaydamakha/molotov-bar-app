@@ -46,12 +46,12 @@ class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepos
   }
 
   @override
-  Cocktail setFavorite(Cocktail cocktail) {
+  Future<Cocktail> setFavorite(Cocktail cocktail) async {
     throw UnimplementedError();
   }
 
   @override
-  Cocktail unsetFavorite(Cocktail cocktail) {
+  Future<Cocktail> unsetFavorite(Cocktail cocktail) async {
     throw UnimplementedError();
   }
 }

@@ -44,12 +44,12 @@ class CompositeCocktailRepository implements CocktailRepository {
   }
 
   @override
-  Cocktail setFavorite(Cocktail cocktail) {
+  Future<Cocktail> setFavorite(Cocktail cocktail) async {
     return localCocktailRepository.setFavorite(cocktail);
   }
 
   @override
-  Cocktail unsetFavorite(Cocktail cocktail) {
+  Future<Cocktail> unsetFavorite(Cocktail cocktail) async {
     return localCocktailRepository.unsetFavorite(cocktail);
   }
 }

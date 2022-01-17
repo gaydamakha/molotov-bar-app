@@ -7,7 +7,7 @@ abstract class CocktailRepository {
 
   Future<List<Cocktail>> getFavorites();
 
-  Cocktail setFavorite(Cocktail cocktail);
+  Future<Cocktail> setFavorite(Cocktail cocktail);
 
-  Cocktail unsetFavorite(Cocktail cocktail);
+  Future<Cocktail> unsetFavorite(Cocktail cocktail);
 }
