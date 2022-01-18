@@ -4,7 +4,7 @@ import 'package:molotov_bar/view/widgets/drop_down.dart';
 class SearchBar extends StatelessWidget {
   final void Function(dynamic) onSubmitted;
   final String? filterDropdownTitle;
-  final List<String>? listOfFilters;
+  final List<SelectedListItem>? listOfFilters;
 
   const SearchBar(
       {Key? key,
@@ -23,7 +23,7 @@ class SearchBar extends StatelessWidget {
         DropDown(
           bottomSheetTitle: "Ingredients",
           searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
-          dataList: listOfFilters!.map((e) => SelectedListItem(false, e)).toList(),
+          dataList: listOfFilters ?? [],
           enableMultipleSelection: false,
           searchController: filterController,
         ),

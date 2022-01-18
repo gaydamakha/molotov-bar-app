@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/core/models/ingredient.dart';
 import 'package:molotov_bar/providers/providers.dart';
 import 'package:molotov_bar/view/widgets/cocktails_list.dart';
+import 'package:molotov_bar/view/widgets/drop_down.dart';
 import 'package:molotov_bar/view/widgets/search_bar.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 
@@ -42,7 +43,7 @@ class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
             },
             listOfFilters: ingredients.when(
                 data: (ingredientsList) =>
-                    ingredientsList.map((e) => e.title).toList(),
+                    ingredientsList.map((e) => SelectedListItem(false, e.title)).toList(),
                 error: (err, stack) => [],
                 loading: () => [])),
         const SizedBox(height: 10),
