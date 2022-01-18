@@ -213,7 +213,9 @@ class _MainBodyState extends State<MainBody> {
                         : () {
                       setState(() {
                         for (var item in mainList) {
-                          item.isSelected = false;
+                          if(item.name != mainList[index].name){
+                            item.isSelected = false;
+                          }
                         }
                         mainList[index].isSelected = !mainList[index].isSelected;
                       });
