@@ -5,6 +5,8 @@ abstract class CocktailRepository {
 
   Future<List<Cocktail>> search(String value);
 
+  Future<List<Cocktail>> filterByIngredient(String value);
+
   Future<List<Cocktail>> getFavorites();
 
   Future<Cocktail> setFavorite(Cocktail cocktail);

@@ -51,4 +51,10 @@ class LocalCocktailRepository extends BaseLocalRepository implements CocktailRep
   Future<List<Cocktail>> getAll() async {
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<Cocktail>> filterByIngredient(String value) {
+    throw UnimplementedError();
+  }
+
 }

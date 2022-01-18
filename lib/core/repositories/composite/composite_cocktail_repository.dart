@@ -52,4 +52,9 @@ class CompositeCocktailRepository implements CocktailRepository {
   Future<Cocktail> unsetFavorite(Cocktail cocktail) async {
     return localCocktailRepository.unsetFavorite(cocktail);
   }
+
+  @override
+  Future<List<Cocktail>> filterByIngredient(String value) {
+    throw UnimplementedError();
+  }
 }
