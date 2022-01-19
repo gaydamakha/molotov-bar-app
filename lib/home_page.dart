@@ -25,14 +25,7 @@ class HomePage extends StatelessWidget {
                 vertical: 10,
               ),
               currentIndex: tabsRouter.activeIndex,
-              onTap: (i) {
-                while (tabsRouter.canNavigateBack) {
-                  tabsRouter.navigateBack();
-                }
-                tabsRouter.setActiveIndex(i);
-                tabsRouter.navigateNamed(
-                    tabsRouter.routeCollection.routes.elementAt(i).path);
-              },
+              onTap: tabsRouter.setActiveIndex,
               items: [
                 SalomonBottomBarItem(
                   icon: const Icon(

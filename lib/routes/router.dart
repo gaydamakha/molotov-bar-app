@@ -18,7 +18,7 @@ import 'package:molotov_bar/view/pages/favorites_list_page.dart';
             page: CocktailsSearchPage,
           ),
           AutoRoute(
-            path: 'detail',
+            path: ':name',
             page: CocktailDetailPage,
           )
         ],
@@ -33,7 +33,7 @@ import 'package:molotov_bar/view/pages/favorites_list_page.dart';
             page: FavoritesListPage,
           ),
           AutoRoute(
-            path: 'detail',
+            path: ':name',
             page: CocktailDetailPage,
           )
         ]

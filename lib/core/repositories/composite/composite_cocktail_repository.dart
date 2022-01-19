@@ -57,4 +57,17 @@ class CompositeCocktailRepository implements CocktailRepository {
   Future<List<Cocktail>> filterByIngredient(String value) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Cocktail?> getByName(String name) async {
+    var cocktail = await httpCocktailRepository.getByName(name);
+    if (cocktail == null) {
+      return null;
+    }
+    var favorite = await localCocktailRepository.getByName(name);
+    if (favorite != null) {
+      cocktail.favorite = true;
+    }
+    return cocktail;
+  }
 }

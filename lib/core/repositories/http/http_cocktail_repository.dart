@@ -52,21 +52,32 @@ class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepos
       return [];
     }
 
-    List<int> cocktailIds = (drinks as List<dynamic>)
-        .map((e) => e['idDrink'] as int)
-        .toList();
+    List<String> cocktailIds =
+        (drinks as List<dynamic>).map((e) => e['idDrink'] as String).toList();
 
     List<Cocktail> cocktails = [];
 
     for (var id in cocktailIds) {
-      response = await get('/lookup.php',{'i': id});
-      if (response.statusCode != 200) {
-        throw CocktailError(
-            code: 1, message: 'Failed to fetch cocktails (c\'est de la merde)');
+      var cocktail = await getByName(id);
+      if (cocktail != null) {
+        cocktails.add(cocktail);
       }
-      cocktails.add(Cocktail.fromJson(json.decode(response.body)['drinks'][0]));
     }
     return cocktails;
+  }
+
+  @override
+  Future<Cocktail?> getByName(String name) async {
+    var response = await get('/lookup.php', {'i': name});
+    if (response.statusCode != 200) {
+      throw CocktailError(
+          code: 1, message: 'Failed to fetch cocktails (c\'est de la merde)');
+    }
+    var drinks = json.decode(response.body)['drinks'];
+    if (drinks == null) {
+      return null;
+    }
+    return Cocktail.fromCocktailDbJson(json.decode(response.body)['drinks'][0]);
   }
 
   @override

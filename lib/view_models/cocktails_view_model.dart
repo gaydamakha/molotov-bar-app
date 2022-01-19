@@ -18,8 +18,6 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
 
   List<Cocktail> getCocktails() => state.cocktails.values.toList();
 
-  List<Cocktail> getFavorites() => state.cocktails.values.where((c) => c.favorite).toList();
-
   _setLoading(bool loading) {
     state = state.copyWith(isLoading: loading);
   }
@@ -41,18 +39,6 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
       _setError(e);
     }
     _setLoading(false);
-  }
-
-  Future<Cocktail> setCocktailFavorite(Cocktail cocktail) async {
-    final ctl = await _cocktailRepository.setFavorite(cocktail);
-    state.cocktails[ctl.name] = ctl;
-    return ctl;
-  }
-
-  Future<Cocktail> unsetCocktailFavorite(Cocktail cocktail) async {
-    final ctl = await _cocktailRepository.unsetFavorite(cocktail);
-    state.cocktails[ctl.name] = ctl;
-    return ctl;
   }
 
   Future<void> initCocktailsList() async {

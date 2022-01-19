@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/local/base_local_repository.dart';
-import 'package:sqflite_common/sqlite_api.dart';
 
-class LocalCocktailRepository extends BaseLocalRepository implements CocktailRepository {
+class LocalCocktailRepository extends BaseLocalRepository
+    implements CocktailRepository {
   final String table = 'favorite_cocktails';
 
   @override
@@ -12,11 +12,15 @@ class LocalCocktailRepository extends BaseLocalRepository implements CocktailRep
     var conn = await connection;
     var result = await conn.query(table, columns: ['cocktail']);
     return List.generate(result.length,
-        (i) {
-          var cocktail = Cocktail.fromJson(jsonDecode(result[i]['cocktail'] as String));
-          cocktail.favorite = true;
-          return cocktail;
+            (i) {
+          return _fromDatabase(result[i]);
         });
+  }
+
+  Cocktail _fromDatabase(Map<String, Object?> result) {
+    var cocktail = Cocktail.fromJson(jsonDecode(result['cocktail'] as String));
+    cocktail.favorite = true;
+    return cocktail;
   }
 
   void save(List<Cocktail> cocktails) {
@@ -43,6 +47,13 @@ class LocalCocktailRepository extends BaseLocalRepository implements CocktailRep
   }
 
   @override
+  Future<Cocktail?> getByName(String name) async {
+    var conn = await connection;
+    var result = await conn.query(table, columns: ['cocktail'], where: 'name = ?' ,whereArgs: [name]);
+    return result.isEmpty ? null : _fromDatabase(result[0]);
+  }
+
+  @override
   Future<List<Cocktail>> search(String value) {
     throw UnimplementedError();
   }
@@ -56,5 +67,4 @@ class LocalCocktailRepository extends BaseLocalRepository implements CocktailRep
   Future<List<Cocktail>> filterByIngredient(String value) {
     throw UnimplementedError();
   }
-
 }
