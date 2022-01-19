@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:molotov_bar/providers/providers.dart';
 import 'package:molotov_bar/view/widgets/drop_down.dart';
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends ConsumerWidget {
   final void Function(dynamic) onSubmitted;
   final String? filterDropdownTitle;
   final List<SelectedListItem>? listOfFilters;
@@ -14,7 +16,7 @@ class SearchBar extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     var filterController = TextEditingController();
     final _inputController = TextEditingController();
 
@@ -26,6 +28,18 @@ class SearchBar extends StatelessWidget {
           dataList: listOfFilters ?? [],
           enableMultipleSelection: false,
           searchController: filterController,
+          selectedItem: (String? item) {
+            ref.read(cocktailsViewModelProvider.notifier).ingredient = item;
+            if (item != null) {
+              ref
+                  .read(cocktailsViewModelProvider.notifier)
+                  .filterByIngredient(item);
+            } else {
+              ref
+                  .read(cocktailsViewModelProvider.notifier)
+                  .initCocktailsList();
+            }
+          },
         ),
       ).showModal(context);
     }

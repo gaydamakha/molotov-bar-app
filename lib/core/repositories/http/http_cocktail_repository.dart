@@ -42,7 +42,7 @@ class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepos
 
   @override
   Future<List<Cocktail>> filterByIngredient(String value) async {
-    var response = await get('/search.php', {'i': value.trim()});
+    var response = await get('/filter.php', {'i': value.trim()});
     if (response.statusCode != 200) {
       throw CocktailError(
           code: 1, message: 'Failed to fetch cocktails (c\'est de la merde)');

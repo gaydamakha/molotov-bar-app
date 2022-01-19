@@ -10,6 +10,8 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
     initCocktailsList();
   }
 
+  String? ingredient;
+
   final CocktailRepository _cocktailRepository;
 
   CocktailError? getError() => state.error;
@@ -34,6 +36,17 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
     _setLoading(true);
     try {
       final cocktails = await _cocktailRepository.search(value);
+      _setCocktails(cocktails);
+    } on CocktailError catch (e) {
+      _setError(e);
+    }
+    _setLoading(false);
+  }
+
+  Future<void> filterByIngredient(String value) async {
+    _setLoading(true);
+    try {
+      final cocktails = await _cocktailRepository.filterByIngredient(value);
       _setCocktails(cocktails);
     } on CocktailError catch (e) {
       _setError(e);
