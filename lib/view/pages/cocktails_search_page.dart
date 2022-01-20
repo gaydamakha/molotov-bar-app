@@ -83,7 +83,17 @@ class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
                 child: Center(
                 child: CircularProgressIndicator(),
               ))
-            : Flexible(child: CocktailsList(cocktailsList: cocktails)),
+            : cocktails.isNotEmpty
+                ? Flexible(child: CocktailsList(cocktailsList: cocktails))
+                : Expanded(
+                    child: Center(
+                      child: Text(
+                          'Ops... nothing found!',
+                        style:
+                        Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                  ),
       ]),
     )));
   }

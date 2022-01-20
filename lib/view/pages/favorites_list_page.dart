@@ -26,7 +26,17 @@ class _FavoritesListPageState extends ConsumerState<FavoritesListPage> {
       ),
       child: Column(children: <Widget>[
         const SizedBox(height: 10),
-        Flexible(child: CocktailsList(cocktailsList: cocktails)),
+        cocktails.isNotEmpty
+            ? Flexible(child: CocktailsList(cocktailsList: cocktails))
+            : Expanded(
+          child: Center(
+            child: Text(
+              'Add your favorite cocktails here!',
+              style:
+              Theme.of(context).textTheme.headline6,
+            ),
+          ),
+        )
       ]),
     )));
   }
