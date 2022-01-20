@@ -39,12 +39,14 @@ class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
       ),
       child: Column(children: <Widget>[
         SearchBar(
-          onSubmitted: (value) {
-            if (value.isNotEmpty) {
+          onSubmitted: (String? value) {
+            if (value != null && value.isNotEmpty) {
               ref
                   .read(cocktailsViewModelProvider.notifier)
                   .searchCocktails(value);
               ref.read(cocktailsViewModelProvider.notifier).ingredient = null;
+            } else {
+              ref.read(cocktailsViewModelProvider.notifier).initCocktailsList();
             }
           },
           listOfFilters: ingredients.when(
