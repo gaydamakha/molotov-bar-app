@@ -6,12 +6,12 @@ import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:molotov_bar/providers/providers.dart';
 
-final detailCocktailProvider = FutureProvider.family<Cocktail?, String>((ref, name) async {
-  final repository = ref.read(cocktailRepositoryProvider);
-  return repository.getByName(name);
+final detailCocktailProvider = FutureProvider.autoDispose.family<Cocktail?, String>((ref, name) async {
+  final repository = ref.watch(cocktailRepositoryProvider);
+  return await repository.getByName(name);
 });
 
-final isCocktailFavoriteProvider = StateProvider.family<bool, String>((ref, name) {
+final isCocktailFavoriteProvider = StateProvider.autoDispose.family<bool, String>((ref, name) {
   ref.watch(cocktailsViewModelProvider);
   return ref.watch(favoriteCocktailsViewModelProvider.select((state) => state.cocktails.containsKey(name)));
 });
@@ -220,6 +220,9 @@ class CocktailDetailPage extends ConsumerWidget {
           }
         },
         error: (err, stack) {
+          print('POPOPO');
+          print(err);
+          print(stack);
           return const Scaffold(
             body: Center(
                 child: Text('Internal error occurred')

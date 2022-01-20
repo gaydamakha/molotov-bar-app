@@ -11,26 +11,26 @@ import 'package:molotov_bar/states/cocktails_list_state.dart';
 import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
 
-final ingredientRepositoryProvider = Provider<IngredientRepository>((ref) {
+final ingredientRepositoryProvider = Provider.autoDispose<IngredientRepository>((ref) {
   return HttpIngredientRepository();
 });
 
-final ingredientsProvider = FutureProvider<List<Ingredient>>((ref) async {
+final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) async {
   final repository = ref.read(ingredientRepositoryProvider);
 
   return await repository.getAll();
 });
 
-final cocktailRepositoryProvider = Provider<CocktailRepository>((ref) {
+final cocktailRepositoryProvider = Provider.autoDispose<CocktailRepository>((ref) {
   return CompositeCocktailRepository(HttpCocktailRepository(), LocalCocktailRepository());
 });
 
-final cocktailsViewModelProvider = StateNotifierProvider<CocktailsViewModel, CocktailsListState>((ref) {
+final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, CocktailsListState>((ref) {
   final repository = ref.read(cocktailRepositoryProvider);
   return CocktailsViewModel(repository);
 });
 
-final favoriteCocktailsViewModelProvider = StateNotifierProvider<FavoriteCocktailsViewModel, CocktailsListState>((ref) {
+final favoriteCocktailsViewModelProvider = StateNotifierProvider.autoDispose<FavoriteCocktailsViewModel, CocktailsListState>((ref) {
   final repository = ref.read(cocktailRepositoryProvider);
   return FavoriteCocktailsViewModel(repository);
 });
