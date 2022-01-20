@@ -1,30 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/view/widgets/drop_down.dart';
 
-class SearchBar extends StatelessWidget {
-  final void Function(dynamic) onSubmitted;
+class SearchBar extends StatefulHookConsumerWidget {
+  final void Function(String?) onSubmitted;
+  final String? filterDropdownTitle;
+  final List<SelectedListItem>? listOfFilters;
+  final Function(SelectedListItem?)? onSelect;
 
-  const SearchBar({Key? key, required this.onSubmitted}) : super(key: key);
+  const SearchBar({
+    Key? key,
+    required this.onSubmitted,
+    this.filterDropdownTitle,
+    this.listOfFilters,
+    this.onSelect,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends ConsumerState<SearchBar> {
+  final TextEditingController _filterController = TextEditingController();
+  final TextEditingController _inputController = TextEditingController();
+  bool _isSearching = false;
+
+  _SearchBarState() {
+    _inputController.addListener(() {
+      if (_inputController.text.isEmpty) {
+        setState(() {
+          _isSearching = false;
+        });
+      }
+      else {
+        setState(() {
+          _isSearching = true;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<SelectedListItem> listOfIngredients = [
-      SelectedListItem(false, "Vodka"),
-      SelectedListItem(false, "Tequila")
-    ];
-
-    var filterController = TextEditingController();
-    final _inputController = TextEditingController();
-
     void onTextFieldTap() {
       DropDownState(
         DropDown(
-          bottomSheetTitle: "Ingredients",
-          searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
-          dataList: listOfIngredients,
-          enableMultipleSelection: false,
-          searchController: filterController,
-        ),
+            bottomSheetTitle: "Ingredients",
+            searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
+            dataList: widget.listOfFilters ?? [],
+            enableMultipleSelection: false,
+            searchController: _filterController,
+            selectedItem: widget.onSelect),
       ).showModal(context);
     }
 
@@ -39,16 +65,26 @@ class SearchBar extends StatelessWidget {
             ),
             textAlignVertical: TextAlignVertical.center,
             controller: _inputController,
-            onChanged: (value) {},
-            onSubmitted: (value) => onSubmitted(value),
+            onChanged: (value) {
+            },
+            onSubmitted: (value) => widget.onSubmitted(value),
             decoration: InputDecoration(
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.tune),
-                  onPressed: onTextFieldTap,
-                ))));
+                suffixIcon: _isSearching
+                    ? IconButton(
+                        onPressed: () {
+                          _inputController.clear();
+                          widget.onSubmitted(null);
+                        },
+                        icon: const Icon(Icons.cancel))
+                    : widget.listOfFilters == null
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.tune),
+                            onPressed: onTextFieldTap,
+                          ))));
   }
 }

@@ -76,6 +76,7 @@ class Cocktail {
       'alcoholDegree': alcoholDegree,
       'ingredients': ingredients.map((e) => e.toJson()).toList(),
       'categories': categories.map((e) => {'title': e}).toList(),
+      'favorite': favorite,
     };
     return json;
   }

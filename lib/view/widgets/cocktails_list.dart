@@ -21,7 +21,7 @@ class CocktailsList extends StatelessWidget {
                   name: cocktail.title,
                   imageUrl: cocktail.imageUrl,
                   onTileTap: () => context.router
-                      .push(CocktailDetailRoute(cocktail: cocktail)),
+                      .push(CocktailDetailRoute(cocktailName: cocktail.name)),
                 ))
             .toList());
   }

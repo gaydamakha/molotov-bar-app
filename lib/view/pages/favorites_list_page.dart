@@ -1,41 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/view/widgets/cocktails_list.dart';
-import 'package:molotov_bar/view_models/favorite_cocktails_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:molotov_bar/providers/providers.dart';
 
-class FavoritesListPage extends StatefulWidget {
+class FavoritesListPage extends StatefulHookConsumerWidget {
   const FavoritesListPage({Key? key}) : super(key: key);
 
   @override
-  State<FavoritesListPage> createState() => _FavoritesListPageState();
+  ConsumerState<FavoritesListPage> createState() => _FavoritesListPageState();
 }
 
-class _FavoritesListPageState extends State<FavoritesListPage> {
+class _FavoritesListPageState extends ConsumerState<FavoritesListPage> {
   @override
   Widget build(BuildContext context) {
-    FavoriteCocktailsViewModel favoriteCocktailsViewModel = context.watch<FavoriteCocktailsViewModel>();
+    ref.watch(cocktailsViewModelProvider);
+    ref.watch(favoriteCocktailsViewModelProvider);
+    final cocktails = ref.watch(favoriteCocktailsViewModelProvider.notifier).getCocktails();
     return Scaffold(
         body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                right: 10,
-                left: 10,
-              ),
-              child: Column(children: <Widget>[
-                const SizedBox(height: 10),
-                Flexible(child: _ui(favoriteCocktailsViewModel)),
-              ]),
-            )));
-  }
-
-  Widget _ui(FavoriteCocktailsViewModel favoriteCocktailsViewModel) {
-    if (favoriteCocktailsViewModel.loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (favoriteCocktailsViewModel.cocktailError != null) {
-      return Text(favoriteCocktailsViewModel.cocktailError!.message);
-    }
-    return CocktailsList(cocktailsList: favoriteCocktailsViewModel.getCocktails());
+      padding: const EdgeInsets.only(
+        top: 10,
+        right: 10,
+        left: 10,
+      ),
+      child: Column(children: <Widget>[
+        const SizedBox(height: 10),
+        cocktails.isNotEmpty
+            ? Flexible(child: CocktailsList(cocktailsList: cocktails))
+            : Expanded(
+          child: Center(
+            child: Text(
+              'Add your favorite cocktails here!',
+              style:
+              Theme.of(context).textTheme.headline6,
+            ),
+          ),
+        )
+      ]),
+    )));
   }
 }

@@ -29,7 +29,7 @@ class DropDown {
   final Function(List<dynamic>)? selectedItems;
 
   /// This will give the call back to the selected item (single) from list.
-  final Function(String)? selectedItem;
+  final Function(SelectedListItem?)? selectedItem;
 
   /// This will give selection choise for single or multiple for list.
   final bool enableMultipleSelection;
@@ -213,12 +213,14 @@ class _MainBodyState extends State<MainBody> {
                         : () {
                       setState(() {
                         for (var item in mainList) {
-                          item.isSelected = false;
+                          if(item.name != mainList[index].name){
+                            item.isSelected = false;
+                          }
                         }
                         mainList[index].isSelected = !mainList[index].isSelected;
                       });
                       widget.dropDown.selectedItem
-                          ?.call(mainList[index].name);
+                          ?.call(mainList[index].isSelected ? mainList[index] : null);
                       _onUnfocusKeyboardAndPop();
                     },
                   );

@@ -1,71 +1,66 @@
-import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/models/cocktail_error.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
+import 'package:molotov_bar/states/cocktails_list_state.dart';
 
-class CocktailsViewModel extends ChangeNotifier {
-  bool _loading = false;
-  Map<String, Cocktail> _cocktails = {};
-  CocktailError? _cocktailError;
-
-  bool get loading => _loading;
-
-  List<Cocktail> getCocktails() => _cocktails.values.toList();
-
-  CocktailError? get cocktailError => _cocktailError;
-
-  final CocktailRepository _cocktailRepository =
-      GetIt.instance<CocktailRepository>();
-
-  CocktailsViewModel() {
+class CocktailsViewModel extends StateNotifier<CocktailsListState> {
+  CocktailsViewModel(this._cocktailRepository)
+      : super(const CocktailsListState()) {
     initCocktailsList();
   }
 
-  setLoading(bool loading) async {
-    _loading = loading;
-    notifyListeners();
+  String? ingredient;
+
+  final CocktailRepository _cocktailRepository;
+
+  CocktailError? getError() => state.error;
+
+  bool isLoading() => state.isLoading;
+
+  List<Cocktail> getCocktails() => state.cocktails.values.toList();
+
+  _setLoading(bool loading) {
+    state = state.copyWith(isLoading: loading);
   }
 
-  setCocktails(List<Cocktail> cocktailsList) {
-    _cocktails = { for (var c in cocktailsList) c.name : c };
+  _setCocktails(List<Cocktail> cocktailsList) {
+    state = state.copyWith(cocktails: {for (var c in cocktailsList) c.name: c});
   }
 
-  setCocktailError(CocktailError cocktailError) {
-    _cocktailError = cocktailError;
+  _setError(CocktailError cocktailError) {
+    state = state.copyWith(error: cocktailError);
   }
 
-  /// Call the cocktail repository and gets the data of requested cocktails f
-  /// an artist.
   Future<void> searchCocktails(String value) async {
-    setLoading(true);
-    var response = await _cocktailRepository.search(value);
+    _setLoading(true);
     try {
-      setCocktails(response);
+      final cocktails = await _cocktailRepository.search(value);
+      _setCocktails(cocktails);
     } on CocktailError catch (e) {
-      setCocktailError(e);
+      _setError(e);
     }
-    setLoading(false);
+    _setLoading(false);
   }
 
-  void setCocktailFavorite(Cocktail cocktail) {
-    _cocktails[cocktail.name] = _cocktailRepository.setFavorite(cocktail);
-    notifyListeners();
-  }
-
-  void unsetCocktailFavorite(Cocktail cocktail) {
-    _cocktails[cocktail.name] = _cocktailRepository.unsetFavorite(cocktail);
-    notifyListeners();
-  }
-
-  initCocktailsList() async {
-    setLoading(true);
+  Future<void> filterByIngredient(String value) async {
+    _setLoading(true);
     try {
-      var response = await _cocktailRepository.getAll(); //todo return a subset (p.e. popular cocktails)
-      setCocktails(response);
+      final cocktails = await _cocktailRepository.filterByIngredient(value);
+      _setCocktails(cocktails);
     } on CocktailError catch (e) {
-      setCocktailError(e);
+      _setError(e);
     }
-    setLoading(false);
+    _setLoading(false);
+  }
+
+  Future<void> initCocktailsList() async {
+    try {
+      final cocktails = await _cocktailRepository.getAll();
+      _setCocktails(cocktails);
+    } on CocktailError catch (e) {
+      _setError(e);
+    }
+    _setLoading(false);
   }
 }
