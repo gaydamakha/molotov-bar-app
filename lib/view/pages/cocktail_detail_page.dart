@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
+import 'package:molotov_bar/theme/app_colors.dart';
 import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:molotov_bar/providers/providers.dart';
@@ -154,6 +155,13 @@ class CocktailDetailPage extends ConsumerWidget {
                           Image.network(
                             cocktail.imageUrl,
                             fit: BoxFit.cover,
+                            errorBuilder: (ctx, obj, st) {
+                              return Container(
+                                decoration: const BoxDecoration(
+                                  color: AppColors.darkGray
+                                ),
+                              );
+                            },
                           ),
                           const DecoratedBox(
                             decoration: BoxDecoration(
@@ -220,9 +228,6 @@ class CocktailDetailPage extends ConsumerWidget {
           }
         },
         error: (err, stack) {
-          print('POPOPO');
-          print(err);
-          print(stack);
           return const Scaffold(
             body: Center(
                 child: Text('Internal error occurred')

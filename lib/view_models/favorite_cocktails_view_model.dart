@@ -30,10 +30,6 @@ class FavoriteCocktailsViewModel extends StateNotifier<CocktailsListState> {
     state = state.copyWith(error: cocktailError);
   }
 
-  Future<Cocktail?> getByName(String name) async {
-    return await _cocktailRepository.getByName(name);
-  }
-
   Future<Cocktail> setCocktailFavorite(Cocktail cocktail) async {
     final ctl = await _cocktailRepository.setFavorite(cocktail);
     final cocktails = state.cocktails;

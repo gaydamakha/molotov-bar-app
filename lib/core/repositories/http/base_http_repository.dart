@@ -1,13 +1,13 @@
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 abstract class BaseHttpRepository {
   final Uri baseUri = Uri.parse('https://www.thecocktaildb.com/api/json/v1/1');
+  final Dio dio;
 
-  final client = http.Client();
+  BaseHttpRepository(this.dio);
 
-  Future<http.Response> get(
+  Future<Response<dynamic>> get(
       String uri, Map<String, dynamic>? queryParameters) async {
-    return client.get(baseUri.replace(
-        pathSegments: [baseUri.path, uri], queryParameters: queryParameters));
+    return dio.get(baseUri.replace(pathSegments: [baseUri.path, uri], queryParameters: queryParameters).toString());
   }
 }
