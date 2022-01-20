@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/src/dio.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/models/cocktail_error.dart';
@@ -76,7 +74,7 @@ class HttpCocktailRepository extends BaseHttpRepository implements CocktailRepos
       throw CocktailError(
           code: 1, message: 'Failed to fetch cocktails (c\'est de la merde)');
     }
-    var drinks = response.statusCode == 304 ? jsonDecode(response.data)['drinks'] : response.data['drinks'];
+    var drinks = response.data['drinks'];
     if (drinks == null) {
       return null;
     }

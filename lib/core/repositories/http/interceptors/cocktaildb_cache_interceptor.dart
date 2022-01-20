@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor/src/model/cache_strategy.dart';
@@ -36,9 +34,9 @@ class CocktaildbCacheInterceptor extends DioCacheInterceptor {
             path: response.requestOptions.path
                 .replaceFirst(RegExp(r'search\.php.*'), "lookup.php?i=$id"),
           ),
-          data: jsonEncode({
+          data: {
             'drinks': [drink]
-          }),
+          },
           headers: response.headers,
           isRedirect: response.isRedirect,
           statusCode: response.statusCode,

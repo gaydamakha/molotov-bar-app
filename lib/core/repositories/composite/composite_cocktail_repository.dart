@@ -62,7 +62,6 @@ class CompositeCocktailRepository implements CocktailRepository {
         c1.favorite = true;
       }
     });
-    // localCocktailRepository.save(cocktails);
     return cocktails;
   }
 
