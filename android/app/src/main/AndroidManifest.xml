@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.molotov_bar">
    <application
-        android:label="molotov_bar"
+        android:label="Molotov.bar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
