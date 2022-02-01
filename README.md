@@ -1,6 +1,6 @@
-# molotov_bar
+# Molotov.bar
 
-Application of cocktails
+Cocktails application
 
 ## Getting Started
 
