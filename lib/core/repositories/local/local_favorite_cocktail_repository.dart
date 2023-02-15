@@ -23,16 +23,12 @@ class LocalCocktailRepository extends BaseLocalRepository
     return cocktail;
   }
 
-  void save(List<Cocktail> cocktails) {
-    // TODO: implement setFavorite
-  }
-
   @override
   Future<Cocktail> setFavorite(Cocktail cocktail) async {
     cocktail.favorite = true;
     var conn = await connection;
     conn.insert(table, <String, Object?>{
-      'name': cocktail.name,
+      'id': cocktail.id,
       'cocktail': jsonEncode(cocktail.toJson()),
     });
     return cocktail;
@@ -42,14 +38,14 @@ class LocalCocktailRepository extends BaseLocalRepository
   Future<Cocktail> unsetFavorite(Cocktail cocktail) async {
     cocktail.favorite = false;
     var conn = await connection;
-    conn.delete(table, where: 'name = ?', whereArgs: [cocktail.name]);
+    conn.delete(table, where: 'id = ?', whereArgs: [cocktail.id]);
     return cocktail;
   }
 
   @override
-  Future<Cocktail?> getByName(String name) async {
+  Future<Cocktail?> getById(int id) async {
     var conn = await connection;
-    var result = await conn.query(table, columns: ['cocktail'], where: 'name = ?' ,whereArgs: [name]);
+    var result = await conn.query(table, columns: ['cocktail'], where: 'id = ?' ,whereArgs: [id]);
     return result.isEmpty ? null : _fromDatabase(result[0]);
   }
 

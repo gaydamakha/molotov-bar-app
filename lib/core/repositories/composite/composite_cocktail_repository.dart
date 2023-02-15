@@ -1,11 +1,10 @@
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:collection/collection.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/local/local_favorite_cocktail_repository.dart';
 
 class CompositeCocktailRepository implements CocktailRepository {
-  final HttpCocktailRepository httpCocktailRepository;
+  final CocktailRepository httpCocktailRepository;
   final LocalCocktailRepository localCocktailRepository;
 
   CompositeCocktailRepository(
@@ -16,7 +15,7 @@ class CompositeCocktailRepository implements CocktailRepository {
     var cocktails = await httpCocktailRepository.getAll();
     var favoriteCocktails = await localCocktailRepository.getFavorites();
     cocktails = cocktails.map((c1) {
-      if (favoriteCocktails.firstWhereOrNull((c2) => c1.name == c2.name) != null) {
+      if (favoriteCocktails.firstWhereOrNull((c2) => c1.id == c2.id) != null) {
         c1.favorite = true;
       }
       return c1;
@@ -35,7 +34,7 @@ class CompositeCocktailRepository implements CocktailRepository {
     var cocktails = await httpCocktailRepository.search(value);
     var favoriteCocktails = await localCocktailRepository.getFavorites();
     cocktails.map((c1) {
-      if (favoriteCocktails.firstWhereOrNull((c2) => c1.name == c2.name) != null) {
+      if (favoriteCocktails.firstWhereOrNull((c2) => c1.id == c2.id) != null) {
         c1.favorite = true;
       }
     });
@@ -58,7 +57,7 @@ class CompositeCocktailRepository implements CocktailRepository {
     var cocktails = await httpCocktailRepository.filterByIngredient(value);
     var favoriteCocktails = await localCocktailRepository.getFavorites();
     cocktails.map((c1) {
-      if (favoriteCocktails.firstWhereOrNull((c2) => c1.name == c2.name) != null) {
+      if (favoriteCocktails.firstWhereOrNull((c2) => c1.id == c2.id) != null) {
         c1.favorite = true;
       }
     });
@@ -66,12 +65,12 @@ class CompositeCocktailRepository implements CocktailRepository {
   }
 
   @override
-  Future<Cocktail?> getByName(String name) async {
-    var cocktail = await httpCocktailRepository.getByName(name);
+  Future<Cocktail?> getById(int id) async {
+    var cocktail = await httpCocktailRepository.getById(id);
     if (cocktail == null) {
       return null;
     }
-    var favorite = await localCocktailRepository.getByName(name);
+    var favorite = await localCocktailRepository.getById(id);
     if (favorite != null) {
       cocktail.favorite = true;
     }

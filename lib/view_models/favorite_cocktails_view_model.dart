@@ -23,7 +23,7 @@ class FavoriteCocktailsViewModel extends StateNotifier<CocktailsListState> {
   }
 
   _setCocktails(List<Cocktail> cocktailsList) {
-    state = state.copyWith(cocktails: {for (var c in cocktailsList) c.name: c});
+    state = state.copyWith(cocktails: {for (var c in cocktailsList) c.id: c});
   }
 
   _setError(CocktailError cocktailError) {
@@ -33,7 +33,7 @@ class FavoriteCocktailsViewModel extends StateNotifier<CocktailsListState> {
   Future<Cocktail> setCocktailFavorite(Cocktail cocktail) async {
     final ctl = await _cocktailRepository.setFavorite(cocktail);
     final cocktails = state.cocktails;
-    cocktails[ctl.name] = ctl;
+    cocktails[ctl.id] = ctl;
     state = state.copyWith(cocktails: cocktails);
     return ctl;
   }
@@ -41,7 +41,7 @@ class FavoriteCocktailsViewModel extends StateNotifier<CocktailsListState> {
   Future<void> unsetCocktailFavorite(Cocktail cocktail) async {
     final ctl = await _cocktailRepository.unsetFavorite(cocktail);
     final cocktails = state.cocktails;
-    cocktails.remove(ctl.name);
+    cocktails.remove(ctl.id);
     state = state.copyWith(cocktails: cocktails);
     return;
   }

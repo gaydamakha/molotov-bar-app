@@ -1,11 +1,13 @@
-import 'package:dio/src/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:molotov_bar/core/models/ingredient.dart';
 import 'package:molotov_bar/core/models/ingredient_error.dart';
 import 'package:molotov_bar/core/repositories/http/base_http_repository.dart';
 import 'package:molotov_bar/core/repositories/ingredient_repository.dart';
 
-class HttpIngredientRepository extends BaseHttpRepository implements IngredientRepository {
-  HttpIngredientRepository(Dio dio) : super(dio);
+class HttpCocktailDbIngredientRepository extends BaseHttpRepository implements IngredientRepository {
+  HttpCocktailDbIngredientRepository(Dio dio) : super(dio) {
+    dio.options.baseUrl = 'https://www.thecocktaildb.com/api/json/v1/1';
+  }
 
   @override
   Future<List<Ingredient>> getAll() async {

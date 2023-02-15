@@ -25,7 +25,7 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
   }
 
   _setCocktails(List<Cocktail> cocktailsList) {
-    state = state.copyWith(cocktails: {for (var c in cocktailsList) c.name: c});
+    state = state.copyWith(cocktails: {for (var c in cocktailsList) c.id: c});
   }
 
   _setError(CocktailError cocktailError) {

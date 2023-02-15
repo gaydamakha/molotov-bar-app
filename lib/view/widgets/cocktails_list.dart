@@ -18,10 +18,10 @@ class CocktailsList extends StatelessWidget {
         crossAxisCount: 2,
         children: cocktailsList
             .map((cocktail) => CocktailTile(
-                  name: cocktail.title,
+                  name: cocktail.name,
                   imageUrl: cocktail.imageUrl,
                   onTileTap: () => context.router
-                      .push(CocktailDetailRoute(cocktailName: cocktail.name)),
+                      .push(CocktailDetailRoute(cocktailId: cocktail.id)),
                 ))
             .toList());
   }

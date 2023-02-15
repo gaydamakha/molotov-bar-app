@@ -9,7 +9,7 @@ abstract class CocktailRepository {
 
   Future<List<Cocktail>> getFavorites();
 
-  Future<Cocktail?> getByName(String name);
+  Future<Cocktail?> getById(int id);
 
   Future<Cocktail> setFavorite(Cocktail cocktail);
 

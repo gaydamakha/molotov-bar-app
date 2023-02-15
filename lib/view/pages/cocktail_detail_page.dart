@@ -7,28 +7,28 @@ import 'package:molotov_bar/theme/app_icons.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:molotov_bar/providers/providers.dart';
 
-final detailCocktailProvider = FutureProvider.autoDispose.family<Cocktail?, String>((ref, name) async {
+final detailCocktailProvider = FutureProvider.autoDispose.family<Cocktail?, int>((ref, id) async {
   final repository = ref.watch(cocktailRepositoryProvider);
-  return await repository.getByName(name);
+  return await repository.getById(id);
 });
 
-final isCocktailFavoriteProvider = StateProvider.autoDispose.family<bool, String>((ref, name) {
+final isCocktailFavoriteProvider = StateProvider.autoDispose.family<bool, int>((ref, id) {
   ref.watch(cocktailsViewModelProvider);
-  return ref.watch(favoriteCocktailsViewModelProvider.select((state) => state.cocktails.containsKey(name)));
+  return ref.watch(favoriteCocktailsViewModelProvider.select((state) => state.cocktails.containsKey(id)));
 });
 
 class CocktailDetailPage extends ConsumerWidget {
-  final String cocktailName;
+  final int cocktailId;
 
   const CocktailDetailPage({
     Key? key,
-    required this.cocktailName,
+    required this.cocktailId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var cocktail = ref.watch(detailCocktailProvider(cocktailName));
-    var isFavorite = ref.watch(isCocktailFavoriteProvider(cocktailName));
+    var cocktail = ref.watch(detailCocktailProvider(cocktailId));
+    var isFavorite = ref.watch(isCocktailFavoriteProvider(cocktailId));
     return cocktail.when(
         data: (cocktail) {
           if (cocktail == null) {
@@ -103,7 +103,7 @@ class CocktailDetailPage extends ConsumerWidget {
                             children: [
                               ListTile(
                                 title: Text(
-                                  cocktail.title,
+                                  cocktail.name,
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -128,7 +128,7 @@ class CocktailDetailPage extends ConsumerWidget {
                                 leading: SvgPicture.asset(AppIcons.list,
                                     height: 20),
                                 title: Text(
-                                  cocktail.categories[0],
+                                  cocktail.category,
                                   style: Theme
                                       .of(context)
                                       .textTheme
@@ -199,7 +199,7 @@ class CocktailDetailPage extends ConsumerWidget {
                                 visualDensity: const VisualDensity(
                                     horizontal: -4.0, vertical: -4.0),
                                 title: Text([
-                                  ingredient.title,
+                                  ingredient.name,
                                   ingredient.quantity?.toString(),
                                   ingredient.measurement
                                 ].where((e) => e != null).join(" ")),

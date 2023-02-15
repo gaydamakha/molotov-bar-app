@@ -5,9 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/core/models/ingredient.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/composite/composite_cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_ingredient_repository.dart';
-import 'package:molotov_bar/core/repositories/http/interceptors/cocktaildb_cache_interceptor.dart';
+import 'package:molotov_bar/core/repositories/http/http_cocktaildb_ingredient_repository.dart';
+import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_repository.dart';
+import 'package:molotov_bar/core/repositories/http/interceptors/molotov_bar_api_cache_interceptor.dart';
 import 'package:molotov_bar/core/repositories/ingredient_repository.dart';
 import 'package:molotov_bar/core/repositories/local/local_favorite_cocktail_repository.dart';
 import 'package:molotov_bar/states/cocktails_list_state.dart';
@@ -19,26 +19,30 @@ final cacheStoreProvider = Provider<CacheStore>((ref) {
 });
 
 final dioProvider = Provider<Dio>((ref) {
-  final cacheStore = ref.read(cacheStoreProvider);
+  // final cacheStore = ref.read(cacheStoreProvider);
   final Dio dio = Dio();
   ref.onDispose(dio.close);
-  final cacheOptions = CacheOptions(
-    store: cacheStore,
-    policy: CachePolicy.forceCache,
-    hitCacheOnErrorExcept: [],
-    maxStale: const Duration(days: 7),
-    priority: CachePriority.normal,
-    cipher: null,
-    keyBuilder: CacheOptions.defaultCacheKeyBuilder,
-    allowPostMethod: false,
-  );
-
-  return dio..interceptors.add(CocktaildbCacheInterceptor(options: cacheOptions));
+  return dio;
+  // TODO: fix the cache
+  // final cacheOptions = CacheOptions(
+  //   store: cacheStore,
+  //   policy: CachePolicy.forceCache,
+  //   hitCacheOnErrorExcept: [],
+  //   maxStale: const Duration(days: 7),
+  //   priority: CachePriority.normal,
+  //   cipher: null,
+  //   keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+  //   allowPostMethod: false,
+  // );
+  //
+  // return dio..interceptors.add(MolotovBarApiCacheInterceptor(options: cacheOptions));
 });
 
 final ingredientRepositoryProvider = Provider.autoDispose<IngredientRepository>((ref) {
-  final dio = ref.watch(dioProvider);
-  return HttpIngredientRepository(dio);
+  final Dio dio = Dio();
+  ref.onDispose(dio.close);
+  // final dio = ref.watch(dioProvider);
+  return HttpCocktailDbIngredientRepository(dio);
 });
 
 final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) async {
@@ -48,8 +52,10 @@ final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) a
 });
 
 final cocktailRepositoryProvider = Provider<CocktailRepository>((ref) {
-  final dio = ref.watch(dioProvider);
-  return CompositeCocktailRepository(HttpCocktailRepository(dio), LocalCocktailRepository());
+  final Dio dio = Dio();
+  ref.onDispose(dio.close);
+  // final dio = ref.watch(dioProvider);
+  return CompositeCocktailRepository(HttpMolotovBarApiRepository(dio), LocalCocktailRepository());
 });
 
 final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, CocktailsListState>((ref) {

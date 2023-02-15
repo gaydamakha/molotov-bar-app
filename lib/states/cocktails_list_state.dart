@@ -9,6 +9,6 @@ class CocktailsListState with _$CocktailsListState {
   const factory CocktailsListState({
     @Default(true) bool isLoading,
     @Default(null) CocktailError? error,
-    @Default({}) Map<String, Cocktail> cocktails,
+    @Default({}) Map<int, Cocktail> cocktails,
   }) = _CocktailsListState;
 }
