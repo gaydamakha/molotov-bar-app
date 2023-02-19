@@ -50,17 +50,17 @@ class LocalCocktailRepository extends BaseLocalRepository
   }
 
   @override
-  Future<List<Cocktail>> search(String value) {
+  Future<List<Cocktail>> search(String value, int limit, {int offset = 0}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Cocktail>> getAll() async {
+  Future<List<Cocktail>> getAll(int limit, {int offset = 0}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Cocktail>> filterByIngredient(String value) {
+  Future<List<Cocktail>> filterByIngredient(String value, int limit, {int offset = 0}) {
     throw UnimplementedError();
   }
 }

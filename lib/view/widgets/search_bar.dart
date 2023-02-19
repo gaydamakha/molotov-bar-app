@@ -5,14 +5,13 @@ import 'package:molotov_bar/view/widgets/drop_down.dart';
 class SearchBar extends StatefulHookConsumerWidget {
   final void Function(String?) onSubmitted;
   final String? filterDropdownTitle;
-  final List<SelectedListItem>? listOfFilters;
+  List<SelectedListItem>? listOfFilters;
   final Function(SelectedListItem?)? onSelect;
 
-  const SearchBar({
+  SearchBar({
     Key? key,
     required this.onSubmitted,
     this.filterDropdownTitle,
-    this.listOfFilters,
     this.onSelect,
   }) : super(key: key);
 
@@ -31,8 +30,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
         setState(() {
           _isSearching = false;
         });
-      }
-      else {
+      } else {
         setState(() {
           _isSearching = true;
         });
@@ -65,8 +63,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
             ),
             textAlignVertical: TextAlignVertical.center,
             controller: _inputController,
-            onChanged: (value) {
-            },
+            onChanged: (value) {},
             onSubmitted: (value) => widget.onSubmitted(value),
             decoration: InputDecoration(
                 border: InputBorder.none,

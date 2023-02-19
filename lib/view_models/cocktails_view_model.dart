@@ -5,6 +5,8 @@ import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/states/cocktails_list_state.dart';
 
 class CocktailsViewModel extends StateNotifier<CocktailsListState> {
+  final int defaultLimit = 100;
+
   CocktailsViewModel(this._cocktailRepository)
       : super(const CocktailsListState()) {
     initCocktailsList();
@@ -35,7 +37,7 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
   Future<void> searchCocktails(String value) async {
     _setLoading(true);
     try {
-      final cocktails = await _cocktailRepository.search(value);
+      final cocktails = await _cocktailRepository.search(value, defaultLimit);
       _setCocktails(cocktails);
     } on CocktailError catch (e) {
       _setError(e);
@@ -46,7 +48,7 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
   Future<void> filterByIngredient(String value) async {
     _setLoading(true);
     try {
-      final cocktails = await _cocktailRepository.filterByIngredient(value);
+      final cocktails = await _cocktailRepository.filterByIngredient(value, defaultLimit);
       _setCocktails(cocktails);
     } on CocktailError catch (e) {
       _setError(e);
@@ -56,7 +58,7 @@ class CocktailsViewModel extends StateNotifier<CocktailsListState> {
 
   Future<void> initCocktailsList() async {
     try {
-      final cocktails = await _cocktailRepository.getAll();
+      final cocktails = await _cocktailRepository.getAll(defaultLimit);
       _setCocktails(cocktails);
     } on CocktailError catch (e) {
       _setError(e);

@@ -12,8 +12,8 @@ class HttpMolotovBarApiCocktailRepository extends BaseHttpRepository
 
   //TODO: add offset and limit
   @override
-  Future<List<Cocktail>> getAll() async {
-    var response = await get('/cocktails');
+  Future<List<Cocktail>> getAll(int limit, {int offset = 0}) async {
+    var response = await get('/cocktails', {'offset': offset, 'limit': limit});
     if (response.statusCode != 200) {
       throw CocktailError(
           code: 1, message: 'Failed to fetch cocktails');
@@ -29,7 +29,7 @@ class HttpMolotovBarApiCocktailRepository extends BaseHttpRepository
   }
 
   @override
-  Future<List<Cocktail>> search(String value) async {
+  Future<List<Cocktail>> search(String value, int limit, {int offset = 0}) async {
     var response = await get('/cocktails', {'keyword': value});
     if (response.statusCode != 200) {
       throw CocktailError(
@@ -46,7 +46,7 @@ class HttpMolotovBarApiCocktailRepository extends BaseHttpRepository
   }
 
   @override
-  Future<List<Cocktail>> filterByIngredient(String ingredient) async {
+  Future<List<Cocktail>> filterByIngredient(String ingredient, int limit, {int offset = 0}) async {
     var response = await get('/cocktails', {'ing': ingredient});
     if (response.statusCode != 200) {
       throw CocktailError(

@@ -11,8 +11,8 @@ class CompositeCocktailRepository implements CocktailRepository {
       this.httpCocktailRepository, this.localCocktailRepository);
 
   @override
-  Future<List<Cocktail>> getAll() async {
-    var cocktails = await httpCocktailRepository.getAll();
+  Future<List<Cocktail>> getAll(int limit, {int offset = 0}) async {
+    var cocktails = await httpCocktailRepository.getAll(limit, offset: offset);
     var favoriteCocktails = await localCocktailRepository.getFavorites();
     cocktails = cocktails.map((c1) {
       if (favoriteCocktails.firstWhereOrNull((c2) => c1.id == c2.id) != null) {
@@ -30,8 +30,8 @@ class CompositeCocktailRepository implements CocktailRepository {
   }
 
   @override
-  Future<List<Cocktail>> search(String value) async {
-    var cocktails = await httpCocktailRepository.search(value);
+  Future<List<Cocktail>> search(String value, int limit, {int offset = 0}) async {
+    var cocktails = await httpCocktailRepository.search(value, limit, offset: offset);
     var favoriteCocktails = await localCocktailRepository.getFavorites();
     cocktails.map((c1) {
       if (favoriteCocktails.firstWhereOrNull((c2) => c1.id == c2.id) != null) {
@@ -53,8 +53,8 @@ class CompositeCocktailRepository implements CocktailRepository {
   }
 
   @override
-  Future<List<Cocktail>> filterByIngredient(String value) async {
-    var cocktails = await httpCocktailRepository.filterByIngredient(value);
+  Future<List<Cocktail>> filterByIngredient(String value, int limit, {int offset = 0}) async {
+    var cocktails = await httpCocktailRepository.filterByIngredient(value, limit, offset: offset);
     var favoriteCocktails = await localCocktailRepository.getFavorites();
     cocktails.map((c1) {
       if (favoriteCocktails.firstWhereOrNull((c2) => c1.id == c2.id) != null) {

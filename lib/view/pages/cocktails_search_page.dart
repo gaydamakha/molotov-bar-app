@@ -18,83 +18,99 @@ class CocktailsSearchPage extends StatefulHookConsumerWidget {
 }
 
 class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
+  static const int defaultIngredientsLimit = 10;
+
   @override
   Widget build(BuildContext context) {
     ref.watch(cocktailsViewModelProvider);
     final CocktailsViewModel cocktailsViewModel =
-        ref.watch(cocktailsViewModelProvider.notifier);
-    final AsyncValue<List<Ingredient>> ingredients =
-        ref.watch(ingredientsProvider);
+    ref.watch(cocktailsViewModelProvider.notifier);
     final CocktailError? error = cocktailsViewModel.getError();
     final bool isLoading = cocktailsViewModel.isLoading();
     final List<Cocktail> cocktails = cocktailsViewModel.getCocktails();
     final String? selectedIngredient = cocktailsViewModel.ingredient;
+    final SearchBar searchBar = SearchBar(
+      onSubmitted: (String? value) {
+        if (value != null && value.isNotEmpty) {
+          ref
+              .read(cocktailsViewModelProvider.notifier)
+              .searchCocktails(value);
+          ref
+              .read(cocktailsViewModelProvider.notifier)
+              .ingredient = null;
+        } else {
+          ref.read(cocktailsViewModelProvider.notifier)
+              .initCocktailsList();
+        }
+      },
+      onSelect: (SelectedListItem? item) {
+        ref
+            .read(cocktailsViewModelProvider.notifier)
+            .ingredient =
+            item?.name;
+        if (item != null) {
+          ref
+              .read(cocktailsViewModelProvider.notifier)
+              .filterByIngredient(item.name);
+        } else {
+          ref.read(cocktailsViewModelProvider.notifier)
+              .initCocktailsList();
+        }
+      },
+    );
     return Scaffold(
         body: SafeArea(
             child: Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-        right: 10,
-        left: 10,
-      ),
-      child: Column(children: <Widget>[
-        SearchBar(
-          onSubmitted: (String? value) {
-            if (value != null && value.isNotEmpty) {
-              ref
-                  .read(cocktailsViewModelProvider.notifier)
-                  .searchCocktails(value);
-              ref.read(cocktailsViewModelProvider.notifier).ingredient = null;
-            } else {
-              ref.read(cocktailsViewModelProvider.notifier).initCocktailsList();
-            }
-          },
-          listOfFilters: ingredients.when(
-              data: (ingredientsList) {
-                final list = ingredientsList
-                    .map((e) => SelectedListItem(false, e.name))
-                    .toList();
-                if (selectedIngredient != null) {
-                  list.removeWhere((e) => e.name == selectedIngredient);
-                  list.insert(0, SelectedListItem(true, selectedIngredient));
-                }
-                return list;
-              },
-              error: (err, stack) => [],
-              loading: () => []),
-          onSelect: (SelectedListItem? item) {
-            ref.read(cocktailsViewModelProvider.notifier).ingredient =
-                item?.name;
-            if (item != null) {
-              ref
-                  .read(cocktailsViewModelProvider.notifier)
-                  .filterByIngredient(item.name);
-            } else {
-              ref.read(cocktailsViewModelProvider.notifier).initCocktailsList();
-            }
-          },
-        ),
-        const SizedBox(height: 10),
-        error != null
-            ? Expanded(child: Center(child: Text(error.message)))
-            : const SizedBox(),
-        isLoading
-            ? const Expanded(
-                child: Center(
-                child: CircularProgressIndicator(),
-              ))
-            : cocktails.isNotEmpty
-                ? Flexible(child: CocktailsList(cocktailsList: cocktails))
-                : Expanded(
+              padding: const EdgeInsets.only(
+                top: 10,
+                right: 10,
+                left: 10,
+              ),
+              child: Column(children: <Widget>[
+                FutureBuilder<List<Ingredient>>(
+                    future: ref.read(ingredientRepositoryProvider).getAll(
+                        defaultIngredientsLimit),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Ingredient>> snapshot) {
+                      if (snapshot.hasData) {
+                        final listOfFilters = snapshot.data
+                            ?.map((e) => SelectedListItem(false, e.name))
+                            .toList();
+                        if (selectedIngredient != null) {
+                          listOfFilters?.removeWhere((e) =>
+                          e.name == selectedIngredient);
+                          listOfFilters?.insert(
+                              0, SelectedListItem(
+                              true, selectedIngredient));
+                        }
+                        searchBar.listOfFilters = listOfFilters;
+                        return searchBar;
+                      }
+                      return searchBar;
+                    }),
+                const SizedBox(height: 10),
+                error != null
+                    ? Expanded(child: Center(child: Text(error.message)))
+                    : const SizedBox(),
+                isLoading
+                    ? const Expanded(
                     child: Center(
-                      child: Text(
-                          'Ops... nothing found!',
-                        style:
-                        Theme.of(context).textTheme.headline6,
-                      ),
+                      child: CircularProgressIndicator(),
+                    ))
+                    : cocktails.isNotEmpty
+                    ? Flexible(child: CocktailsList(cocktailsList: cocktails))
+                    : Expanded(
+                  child: Center(
+                    child: Text(
+                      'Ops... nothing found!',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headline6,
                     ),
                   ),
-      ]),
-    )));
+                ),
+              ]),
+            )));
   }
 }

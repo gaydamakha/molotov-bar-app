@@ -2,12 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:molotov_bar/core/models/ingredient.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/composite/composite_cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_ingredient_repository.dart';
-import 'package:molotov_bar/core/repositories/http/interceptors/molotov_bar_api_cache_interceptor.dart';
 import 'package:molotov_bar/core/repositories/ingredient_repository.dart';
 import 'package:molotov_bar/core/repositories/local/local_favorite_cocktail_repository.dart';
 import 'package:molotov_bar/states/cocktails_list_state.dart';
@@ -41,12 +39,6 @@ final dioProvider = Provider<Dio>((ref) {
 final ingredientRepositoryProvider = Provider.autoDispose<IngredientRepository>((ref) {
   final dio = ref.watch(dioProvider);
   return HttpMolotovBarApiIngredientRepository(dio);
-});
-
-final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) async {
-  final repository = ref.read(ingredientRepositoryProvider);
-
-  return await repository.getAll();
 });
 
 final cocktailRepositoryProvider = Provider<CocktailRepository>((ref) {
