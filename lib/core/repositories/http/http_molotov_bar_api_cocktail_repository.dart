@@ -4,12 +4,13 @@ import 'package:molotov_bar/core/models/cocktail_error.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/base_http_repository.dart';
 
-class HttpMolotovBarApiRepository extends BaseHttpRepository
+class HttpMolotovBarApiCocktailRepository extends BaseHttpRepository
     implements CocktailRepository {
-  HttpMolotovBarApiRepository(Dio dio) : super(dio) {
+  HttpMolotovBarApiCocktailRepository(Dio dio) : super(dio) {
     dio.options.baseUrl = 'http://localhost/api/v1';
   }
 
+  //TODO: add offset and limit
   @override
   Future<List<Cocktail>> getAll() async {
     var response = await get('/cocktails');

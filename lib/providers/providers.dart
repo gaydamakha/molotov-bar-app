@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:molotov_bar/core/models/ingredient.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/composite/composite_cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_cocktaildb_ingredient_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_repository.dart';
+import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_cocktail_repository.dart';
+import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_ingredient_repository.dart';
 import 'package:molotov_bar/core/repositories/http/interceptors/molotov_bar_api_cache_interceptor.dart';
 import 'package:molotov_bar/core/repositories/ingredient_repository.dart';
 import 'package:molotov_bar/core/repositories/local/local_favorite_cocktail_repository.dart';
@@ -39,10 +39,8 @@ final dioProvider = Provider<Dio>((ref) {
 });
 
 final ingredientRepositoryProvider = Provider.autoDispose<IngredientRepository>((ref) {
-  final Dio dio = Dio();
-  ref.onDispose(dio.close);
-  // final dio = ref.watch(dioProvider);
-  return HttpCocktailDbIngredientRepository(dio);
+  final dio = ref.watch(dioProvider);
+  return HttpMolotovBarApiIngredientRepository(dio);
 });
 
 final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) async {
@@ -52,10 +50,8 @@ final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) a
 });
 
 final cocktailRepositoryProvider = Provider<CocktailRepository>((ref) {
-  final Dio dio = Dio();
-  ref.onDispose(dio.close);
-  // final dio = ref.watch(dioProvider);
-  return CompositeCocktailRepository(HttpMolotovBarApiRepository(dio), LocalCocktailRepository());
+  final dio = ref.watch(dioProvider);
+  return CompositeCocktailRepository(HttpMolotovBarApiCocktailRepository(dio), LocalCocktailRepository());
 });
 
 final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, CocktailsListState>((ref) {

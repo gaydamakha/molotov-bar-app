@@ -52,7 +52,7 @@ class _CocktailsSearchPageState extends ConsumerState<CocktailsSearchPage> {
           listOfFilters: ingredients.when(
               data: (ingredientsList) {
                 final list = ingredientsList
-                    .map((e) => SelectedListItem(false, e.title))
+                    .map((e) => SelectedListItem(false, e.name))
                     .toList();
                 if (selectedIngredient != null) {
                   list.removeWhere((e) => e.name == selectedIngredient);
