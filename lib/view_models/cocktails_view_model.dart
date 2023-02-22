@@ -1,68 +1,89 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/models/cocktail_error.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
-import 'package:molotov_bar/states/cocktails_list_state.dart';
 
-class CocktailsViewModel extends StateNotifier<CocktailsListState> {
-  final int defaultLimit = 100;
+class CocktailsViewModel extends StateNotifier<PagingController<int, Cocktail>> {
+  final CocktailRepository _cocktailRepository;
+  final int cocktailsPerPage;
 
-  CocktailsViewModel(this._cocktailRepository)
-      : super(const CocktailsListState()) {
+  CocktailsViewModel(this._cocktailRepository, this.cocktailsPerPage) : super(PagingController(firstPageKey: 0)) {
     initCocktailsList();
   }
 
-  String? ingredient;
+  PagingController<int, Cocktail> getPagingController() => state;
 
-  final CocktailRepository _cocktailRepository;
+  String? _ingredient;
 
-  CocktailError? getError() => state.error;
+  String? get ingredient => _ingredient;
+  String? _search;
 
-  bool isLoading() => state.isLoading;
-
-  List<Cocktail> getCocktails() => state.cocktails.values.toList();
-
-  _setLoading(bool loading) {
-    state = state.copyWith(isLoading: loading);
-  }
-
-  _setCocktails(List<Cocktail> cocktailsList) {
-    state = state.copyWith(cocktails: {for (var c in cocktailsList) c.id: c});
+  _appendCocktails(List<Cocktail> cocktailsList, int pageKey) {
+    final isLastPage = cocktailsList.length < cocktailsPerPage;
+    if (isLastPage) {
+      state.appendLastPage(cocktailsList);
+    } else {
+      final nextPageKey = pageKey + cocktailsList.length;
+      state.appendPage(cocktailsList, nextPageKey);
+    }
   }
 
   _setError(CocktailError cocktailError) {
-    state = state.copyWith(error: cocktailError);
+    state.error = cocktailError;
+  }
+
+  void initCocktailsList() {
+    state.addPageRequestListener((pageKey) {
+      _fetchMoreCocktails(pageKey);
+    });
   }
 
   Future<void> searchCocktails(String value) async {
-    _setLoading(true);
+    _ingredient = null;
+    _search = value;
     try {
-      final cocktails = await _cocktailRepository.search(value, defaultLimit);
-      _setCocktails(cocktails);
+      final cocktails = await _cocktailRepository.search(value, cocktailsPerPage);
+      state.itemList = cocktails;
     } on CocktailError catch (e) {
       _setError(e);
     }
-    _setLoading(false);
   }
 
   Future<void> filterByIngredient(String value) async {
-    _setLoading(true);
+    _ingredient = value;
+    _search = null;
     try {
-      final cocktails = await _cocktailRepository.filterByIngredient(value, defaultLimit);
-      _setCocktails(cocktails);
+      final cocktails = await _cocktailRepository.filterByIngredient(value, cocktailsPerPage);
+      state.itemList = cocktails;
     } on CocktailError catch (e) {
       _setError(e);
     }
-    _setLoading(false);
   }
 
-  Future<void> initCocktailsList() async {
+  Future<void> resetCocktailsList() async {
+    state.nextPageKey = 0;
+    _search = null;
+    _ingredient = null;
+    state.refresh();
+  }
+
+  Future<void> _fetchMoreCocktails(int pageKey) async {
+    if (_search != null || _ingredient != null) {
+      state.appendLastPage([]);
+      return;
+    }
     try {
-      final cocktails = await _cocktailRepository.getAll(defaultLimit);
-      _setCocktails(cocktails);
+      final newCocktails = await _cocktailRepository.getAll(cocktailsPerPage, offset: pageKey);
+      _appendCocktails(newCocktails, pageKey);
     } on CocktailError catch (e) {
       _setError(e);
     }
-    _setLoading(false);
+  }
+
+  @override
+  void dispose() {
+    state.dispose();
+    super.dispose();
   }
 }

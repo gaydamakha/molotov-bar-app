@@ -7,7 +7,7 @@ abstract class CocktailRepository {
 
   Future<List<Cocktail>> filterByIngredient(String value, int limit, {int offset = 0});
 
-  Future<List<Cocktail>> getFavorites();
+  Future<List<Cocktail>> getFavorites(int limit, {int offset = 0});
 
   Future<Cocktail?> getById(int id);
 

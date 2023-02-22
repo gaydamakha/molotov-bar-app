@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/composite/composite_cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_cocktail_repository.dart';
@@ -46,12 +47,15 @@ final cocktailRepositoryProvider = Provider<CocktailRepository>((ref) {
   return CompositeCocktailRepository(HttpMolotovBarApiCocktailRepository(dio), LocalCocktailRepository());
 });
 
-final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, CocktailsListState>((ref) {
+final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, PagingController>((ref) {
   final repository = ref.read(cocktailRepositoryProvider);
-  return CocktailsViewModel(repository);
+  //TODO: parameterize the cocktails per page parameter
+  return CocktailsViewModel(repository, 8);
 });
 
-final favoriteCocktailsViewModelProvider = StateNotifierProvider.autoDispose<FavoriteCocktailsViewModel, CocktailsListState>((ref) {
+final favoriteCocktailsViewModelProvider =
+    StateNotifierProvider.autoDispose<FavoriteCocktailsViewModel, CocktailsListState>((ref) {
   final repository = ref.read(cocktailRepositoryProvider);
-  return FavoriteCocktailsViewModel(repository);
+  //TODO: parameterize the cocktails per page parameter
+  return FavoriteCocktailsViewModel(repository, 8);
 });

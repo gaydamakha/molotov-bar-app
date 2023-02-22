@@ -3,18 +3,16 @@ import 'package:molotov_bar/core/models/cocktail.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/local/base_local_repository.dart';
 
-class LocalCocktailRepository extends BaseLocalRepository
-    implements CocktailRepository {
+class LocalCocktailRepository extends BaseLocalRepository implements CocktailRepository {
   final String table = 'favorite_cocktails';
 
   @override
-  Future<List<Cocktail>> getFavorites() async {
+  Future<List<Cocktail>> getFavorites(int limit, {int offset = 0}) async {
     var conn = await connection;
-    var result = await conn.query(table, columns: ['cocktail']);
-    return List.generate(result.length,
-            (i) {
-          return _fromDatabase(result[i]);
-        });
+    var result = await conn.query(table, columns: ['cocktail'], limit: limit, offset: offset);
+    return List.generate(result.length, (i) {
+      return _fromDatabase(result[i]);
+    });
   }
 
   Cocktail _fromDatabase(Map<String, Object?> result) {
@@ -45,7 +43,7 @@ class LocalCocktailRepository extends BaseLocalRepository
   @override
   Future<Cocktail?> getById(int id) async {
     var conn = await connection;
-    var result = await conn.query(table, columns: ['cocktail'], where: 'id = ?' ,whereArgs: [id]);
+    var result = await conn.query(table, columns: ['cocktail'], where: 'id = ?', whereArgs: [id]);
     return result.isEmpty ? null : _fromDatabase(result[0]);
   }
 
