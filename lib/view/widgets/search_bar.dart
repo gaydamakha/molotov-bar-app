@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:molotov_bar/core/models/ingredient.dart';
+import 'package:molotov_bar/providers/providers.dart';
 import 'package:molotov_bar/view/widgets/drop_down.dart';
+import 'package:molotov_bar/view_models/cocktails_view_model.dart';
 
 class SearchBar extends StatefulHookConsumerWidget {
   final void Function(String?) onSubmitted;
   final String? filterDropdownTitle;
-  List<SelectedListItem>? listOfFilters;
   final Function(SelectedListItem?)? onSelect;
 
-  SearchBar({
+  const SearchBar({
     Key? key,
     required this.onSubmitted,
     this.filterDropdownTitle,
@@ -20,11 +23,17 @@ class SearchBar extends StatefulHookConsumerWidget {
 }
 
 class _SearchBarState extends ConsumerState<SearchBar> {
+  static const int defaultIngredientsLimit = 10;
+  final PagingController<int, SelectedListItem> _pagingController = PagingController(firstPageKey: 0);
   final TextEditingController _filterController = TextEditingController();
   final TextEditingController _inputController = TextEditingController();
   bool _isSearching = false;
 
-  _SearchBarState() {
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchIngredients(pageKey);
+    });
     _inputController.addListener(() {
       if (_inputController.text.isEmpty) {
         setState(() {
@@ -36,19 +45,54 @@ class _SearchBarState extends ConsumerState<SearchBar> {
         });
       }
     });
+    _fetchIngredients(_pagingController.firstPageKey);
+    super.initState();
+  }
+
+  Future<void> _fetchIngredients(int pageKey) async {
+    try {
+      final newIngredients =
+          await ref.read(ingredientRepositoryProvider).getAll(defaultIngredientsLimit, offset: pageKey);
+      _appendIngredients(newIngredients, pageKey);
+    } on Error catch (e) {
+      _setError(e);
+    }
+  }
+
+  _appendIngredients(List<Ingredient> ingredients, int pageKey) {
+    final selectableIngredients = ingredients.map((e) => SelectedListItem(false, e.name)).toList();
+    final isLastPage = selectableIngredients.length < defaultIngredientsLimit;
+    if (isLastPage) {
+      _pagingController.appendLastPage(selectableIngredients);
+    } else {
+      final nextPageKey = pageKey + ingredients.length;
+      _pagingController.appendPage(selectableIngredients, nextPageKey);
+    }
+  }
+
+  _setError(Error cocktailError) {
+    _pagingController.error = cocktailError;
   }
 
   @override
   Widget build(BuildContext context) {
+    final CocktailsViewModel cocktailsViewModel = ref.watch(cocktailsViewModelProvider.notifier);
+    final String? selectedIngredient = cocktailsViewModel.ingredient;
+    if (selectedIngredient != null) {
+      _pagingController.itemList?.removeWhere((e) => e.name == selectedIngredient);
+      _pagingController.itemList?.insert(0, SelectedListItem(true, selectedIngredient));
+    }
     void onTextFieldTap() {
       DropDownState(
         DropDown(
-            bottomSheetTitle: "Ingredients",
-            searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
-            dataList: widget.listOfFilters ?? [],
-            enableMultipleSelection: false,
-            searchController: _filterController,
-            selectedItem: widget.onSelect),
+          bottomSheetTitle: "Ingredients",
+          searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
+          dataList: _pagingController.itemList ?? [],
+          //TODO: replace by PagedListView
+          enableMultipleSelection: false,
+          searchController: _filterController,
+          selectedItem: widget.onSelect,
+        ),
       ).showModal(context);
     }
 
@@ -77,7 +121,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
                           widget.onSubmitted(null);
                         },
                         icon: const Icon(Icons.cancel))
-                    : widget.listOfFilters == null
+                    : _pagingController.itemList == null
                         ? null
                         : IconButton(
                             icon: const Icon(Icons.tune),
