@@ -5,14 +5,12 @@ import 'package:molotov_bar/view/widgets/drop_down.dart';
 class SearchBar extends StatefulHookConsumerWidget {
   final void Function(String?) onSubmitted;
   final String? filterDropdownTitle;
-  final List<SelectedListItem>? listOfFilters;
   final Function(SelectedListItem?)? onSelect;
 
   const SearchBar({
     Key? key,
     required this.onSubmitted,
     this.filterDropdownTitle,
-    this.listOfFilters,
     this.onSelect,
   }) : super(key: key);
 
@@ -25,34 +23,33 @@ class _SearchBarState extends ConsumerState<SearchBar> {
   final TextEditingController _inputController = TextEditingController();
   bool _isSearching = false;
 
-  _SearchBarState() {
+  @override
+  void initState() {
     _inputController.addListener(() {
       if (_inputController.text.isEmpty) {
         setState(() {
           _isSearching = false;
         });
-      }
-      else {
+      } else {
         setState(() {
           _isSearching = true;
         });
       }
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    void onTextFieldTap() {
-      DropDownState(
-        DropDown(
-            bottomSheetTitle: "Ingredients",
-            searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
-            dataList: widget.listOfFilters ?? [],
-            enableMultipleSelection: false,
-            searchController: _filterController,
-            selectedItem: widget.onSelect),
-      ).showModal(context);
-    }
+    final DropDownState dropDownState = DropDownState(
+      DropDown(
+        bottomSheetTitle: "Ingredients",
+        searchBackgroundColor: Theme.of(context).colorScheme.primaryVariant,
+        enableMultipleSelection: false,
+        searchController: _filterController,
+        selectedItem: widget.onSelect,
+      ),
+    );
 
     return Container(
         decoration: BoxDecoration(
@@ -65,8 +62,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
             ),
             textAlignVertical: TextAlignVertical.center,
             controller: _inputController,
-            onChanged: (value) {
-            },
+            onChanged: (value) {},
             onSubmitted: (value) => widget.onSubmitted(value),
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -80,11 +76,10 @@ class _SearchBarState extends ConsumerState<SearchBar> {
                           widget.onSubmitted(null);
                         },
                         icon: const Icon(Icons.cancel))
-                    : widget.listOfFilters == null
-                        ? null
-                        : IconButton(
+                    :
+                IconButton(
                             icon: const Icon(Icons.tune),
-                            onPressed: onTextFieldTap,
+                            onPressed: () => dropDownState.showModal(context),
                           ))));
   }
 }

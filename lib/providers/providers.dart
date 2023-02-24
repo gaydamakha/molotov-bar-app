@@ -2,12 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:molotov_bar/core/models/ingredient.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:molotov_bar/core/repositories/cocktail_repository.dart';
 import 'package:molotov_bar/core/repositories/composite/composite_cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_cocktail_repository.dart';
-import 'package:molotov_bar/core/repositories/http/http_ingredient_repository.dart';
-import 'package:molotov_bar/core/repositories/http/interceptors/cocktaildb_cache_interceptor.dart';
+import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_cocktail_repository.dart';
+import 'package:molotov_bar/core/repositories/http/http_molotov_bar_api_ingredient_repository.dart';
 import 'package:molotov_bar/core/repositories/ingredient_repository.dart';
 import 'package:molotov_bar/core/repositories/local/local_favorite_cocktail_repository.dart';
 import 'package:molotov_bar/states/cocktails_list_state.dart';
@@ -19,45 +18,44 @@ final cacheStoreProvider = Provider<CacheStore>((ref) {
 });
 
 final dioProvider = Provider<Dio>((ref) {
-  final cacheStore = ref.read(cacheStoreProvider);
+  // final cacheStore = ref.read(cacheStoreProvider);
   final Dio dio = Dio();
   ref.onDispose(dio.close);
-  final cacheOptions = CacheOptions(
-    store: cacheStore,
-    policy: CachePolicy.forceCache,
-    hitCacheOnErrorExcept: [],
-    maxStale: const Duration(days: 7),
-    priority: CachePriority.normal,
-    cipher: null,
-    keyBuilder: CacheOptions.defaultCacheKeyBuilder,
-    allowPostMethod: false,
-  );
-
-  return dio..interceptors.add(CocktaildbCacheInterceptor(options: cacheOptions));
+  return dio;
+  // TODO: fix the cache
+  // final cacheOptions = CacheOptions(
+  //   store: cacheStore,
+  //   policy: CachePolicy.forceCache,
+  //   hitCacheOnErrorExcept: [],
+  //   maxStale: const Duration(days: 7),
+  //   priority: CachePriority.normal,
+  //   cipher: null,
+  //   keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+  //   allowPostMethod: false,
+  // );
+  //
+  // return dio..interceptors.add(MolotovBarApiCacheInterceptor(options: cacheOptions));
 });
 
 final ingredientRepositoryProvider = Provider.autoDispose<IngredientRepository>((ref) {
   final dio = ref.watch(dioProvider);
-  return HttpIngredientRepository(dio);
-});
-
-final ingredientsProvider = FutureProvider.autoDispose<List<Ingredient>>((ref) async {
-  final repository = ref.read(ingredientRepositoryProvider);
-
-  return await repository.getAll();
+  return HttpMolotovBarApiIngredientRepository(dio);
 });
 
 final cocktailRepositoryProvider = Provider<CocktailRepository>((ref) {
   final dio = ref.watch(dioProvider);
-  return CompositeCocktailRepository(HttpCocktailRepository(dio), LocalCocktailRepository());
+  return CompositeCocktailRepository(HttpMolotovBarApiCocktailRepository(dio), LocalCocktailRepository());
 });
 
-final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, CocktailsListState>((ref) {
+final cocktailsViewModelProvider = StateNotifierProvider.autoDispose<CocktailsViewModel, PagingController>((ref) {
   final repository = ref.read(cocktailRepositoryProvider);
-  return CocktailsViewModel(repository);
+  //TODO: parameterize the cocktails per page parameter
+  return CocktailsViewModel(repository, 8);
 });
 
-final favoriteCocktailsViewModelProvider = StateNotifierProvider.autoDispose<FavoriteCocktailsViewModel, CocktailsListState>((ref) {
+final favoriteCocktailsViewModelProvider =
+    StateNotifierProvider.autoDispose<FavoriteCocktailsViewModel, CocktailsListState>((ref) {
   final repository = ref.read(cocktailRepositoryProvider);
-  return FavoriteCocktailsViewModel(repository);
+  //TODO: parameterize the cocktails per page parameter
+  return FavoriteCocktailsViewModel(repository, 8);
 });
