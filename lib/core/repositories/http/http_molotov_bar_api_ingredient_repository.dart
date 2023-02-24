@@ -11,9 +11,9 @@ class HttpMolotovBarApiIngredientRepository extends BaseHttpRepository
   }
 
   @override
-  Future<List<Ingredient>> getAll(int limit, {int offset = 0}) async {
+  Future<List<Ingredient>> getAll(int limit, {int offset = 0, String? keyword}) async {
     var response =
-        await get('/ingredients', {'offset': offset, 'limit': limit});
+        await get('/ingredients', {'offset': offset, 'limit': limit, 'keyword': keyword});
     if (response.statusCode != 200) {
       throw IngredientError(
           code: 1, message: 'Failed to fetch ingredients (c\'est de la merde)');
