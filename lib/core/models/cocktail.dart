@@ -14,33 +14,6 @@ class Cocktail {
   Cocktail(this.id, this.name, this.imageUrl, this.description, this.recipe,
       this.alcoholDegree, this.ingredients, this.category, this.favorite);
 
-  factory Cocktail.fromCocktailDbJson(Map<String, dynamic> json,
-      {bool favorite = false}) {
-    List<CocktailIngredient> ingredients = json.keys
-        .where((key) => key.startsWith('strIngredient'))
-        .map((key) {
-          if (json[key] == null) {
-            return null;
-          }
-          String index = key[key.length - 1];
-          return CocktailIngredient(json[key],
-              json['strMeasure' + index]?.toString().trim(), null);
-        })
-        .whereType<CocktailIngredient>()
-        .toList();
-
-    return Cocktail(
-        int.parse(json['idDrink']),
-        json['strDrink'].toString(),
-        json['strDrinkThumb'].toString(),
-        '',
-        json['strInstructions'].toString(),
-        null,
-        ingredients,
-        json['strCategory'].toString(),
-        favorite);
-  }
-
   factory Cocktail.fromJson(Map<String, dynamic> json,
       {bool favorite = false}) {
     var ingredientsJson = json['ingredients'] as List;
